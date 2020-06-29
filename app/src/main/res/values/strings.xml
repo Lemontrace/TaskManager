@@ -1,0 +1,58 @@
+<resources>
+
+    <string name="edit_title">Title :</string>
+    <string name="edit_date">Date :</string>
+    <string name="edit_body">Memo :</string>
+    <string name="edit_set_date">set</string>
+    <string name="edit_confirm">Confirm</string>
+
+    <string name="title_add_task">add a new task</string>
+    <string name="title_edit_task">Edit</string>
+
+    <string name="menu_display_edit">Edit</string>
+    <string name="menu_display_delete">Delete</string>
+
+    <string name="menu_main_sort_by">Sort by…</string>
+
+    <string name="menu_main_show_past_memos">Show past memos</string>
+    <string name="menu_main_export_or_import">Export/Import</string>
+
+    <string name="toast_export_success">Export complete!</string>
+    <string name="toast_export_fail">Export failed.</string>
+
+    <string name="toast_import_success">Import complete!</string>
+    <string name="toast_import_fail">Import failed.</string>
+
+    <string-array name="sort_modes">
+        <item>date_ascending</item>
+        <item>date_descending</item>
+        <item>title_ascending</item>
+        <item>title_descending</item>
+    </string-array>
+
+    <string-array name="export_or_import">
+        <item>export memos to…</item>
+        <item>import memos from…</item>
+    </string-array>
+    <string name="menu_main_notification">Notifications</string>
+    <string name="main_bot_nav_completed">Completed Tasks</string>
+    <string name="main_bot_nav_pending">Pending Tasks</string>
+    <string name="app_name">Tasks</string>
+    <string name="today">Today</string>
+    <string name="overdue">Overdue</string>
+    <string name="title_main">Task</string>
+    <string name="no_title">&lt;No Title&gt;</string>
+    <string name="main_bot_nav_all">All Tasks</string>
+    <string name="edit_unset_date">unset</string>
+    <string name="no_pending_task">No Pending Task</string>
+    <string name="date_not_set">Date Not Set</string>
+
+    <string name="task_delete">Delete</string>
+    <string name="task_mark_as_complete">mark as complete</string>
+    <string name="task_mark_as_incomplete">mark as imcomplete</string>
+    <string name="delete_all_completed_tasks">Delete completed tasks</string>
+    <string name="toast_task_deleted">Task deleted</string>
+    <string name="toast_tasks_deleted">Tasks deleted</string>
+
+
+</resources>

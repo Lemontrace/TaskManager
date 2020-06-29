@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorMenu"
+    tools:context=".TaskDisplayActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/appbar_memo_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:titleTextColor="@color/colorMenu" />
+
+    <include
+        android:id="@+id/include2"
+        layout="@layout/task_uneditable"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar_memo_display" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorMenu"
+            android:drawableTop="@drawable/ic_close_black_48dp"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:onClick="onDeleteButtonClick"
+            android:text="@string/task_delete"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorMenu"
+            android:drawableTop="@drawable/ic_check_black_48dp"
+            android:drawableTint="@color/colorAccent"
+            android:onClick="onCompletedButtonClick"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
