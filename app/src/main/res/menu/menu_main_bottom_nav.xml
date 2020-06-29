@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bot_nav_completed"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:title="@string/main_bot_nav_completed" />
+    <item
+        android:id="@+id/bot_nav_pending"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="@string/main_bot_nav_pending" />
+    <item
+        android:id="@+id/bot_nav_all"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/main_bot_nav_all" />
+</menu>

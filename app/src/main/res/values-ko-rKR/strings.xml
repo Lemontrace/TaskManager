@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="edit_title">제목 :</string>
+    <string name="edit_date">날짜 :</string>
+    <string name="edit_body">메모 :</string>
+    <string name="edit_set_date">지정하기</string>
+    <string name="edit_confirm">저장</string>
+    <string name="title_add_task">할일 추가</string>
+    <string name="title_edit_task">할일 수정</string>
+    <string name="menu_display_edit">수정</string>
+    <string name="menu_display_delete">삭제</string>
+    <string name="menu_main_sort_by">정렬 기준</string>
+    <string name="menu_main_show_past_memos">지난 메모 표시</string>
+    <string name="menu_main_export_or_import">저장/불러오기</string>
+    <string name="toast_export_success">저장 완료!</string>
+    <string name="toast_export_fail">저장 실패.</string>
+    <string name="toast_import_success">불러오기 완료!</string>
+    <string name="toast_import_fail">불러오기 실패.</string>
+    <string-array name="sort_modes">
+        <item>날짜_오름차순</item>
+        <item>날짜_내림차순</item>
+        <item>제목_오름차순</item>
+        <item>제목_내림차순</item>
+    </string-array>
+
+    <string-array name="export_or_import">
+        <item>저장할 위치 선택</item>
+        <item>불러올 파일 선택</item>
+    </string-array>
+    <string name="menu_main_notification">알림</string>
+    <string name="main_bot_nav_completed">완료된 할일</string>
+    <string name="main_bot_nav_pending">진행중인 할일</string>
+    <string name="app_name">할일</string>
+    <string name="today">오늘</string>
+    <string name="overdue">날짜 지남</string>
+    <string name="title_main">할일</string>
+    <string name="no_title">&lt;제목 없음&gt;</string>
+    <string name="main_bot_nav_all">모든 할일</string>
+    <string name="edit_unset_date">지정하지 않기</string>
+    <string name="no_pending_task">진행중인 할일 없음</string>
+    <string name="date_not_set">날짜 지정되지 않음</string>
+    <string name="task_delete">삭제하기</string>
+    <string name="task_mark_as_complete">완료됨 표시</string>
+    <string name="task_mark_as_incomplete">완료되지 않음 표시</string>
+    <string name="delete_all_completed_tasks">완료된 할일 모두 삭제</string>
+    <string name="toast_task_deleted">할일 삭제 완료!</string>
+    <string name="toast_tasks_deleted">할일 삭제 완료!</string>
+</resources>
