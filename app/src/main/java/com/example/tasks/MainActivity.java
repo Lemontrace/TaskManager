@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -47,6 +48,9 @@ public class MainActivity extends FragmentActivity {
 
     static SharedPreferences appInfo;
 
+    BottomNavigationView botNav;
+    Fragment currentFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +62,7 @@ public class MainActivity extends FragmentActivity {
         appbar.inflateMenu(R.menu.menu_main);
 
         //set up bottomNavigationView
-        BottomNavigationView botNav= findViewById(R.id.bottomNavigationView);
+        botNav= findViewById(R.id.bottomNavigationView);
         botNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -67,18 +71,19 @@ public class MainActivity extends FragmentActivity {
                 switch (item.getItemId()) {
 
                     case R.id.bot_nav_completed:
-                        transaction.replace(R.id.fragment_container,new FragmentCompletedTasks());
-                        transaction.commit();
+                        currentFragment=new FragmentCompletedTasks();
                         break;
                     case R.id.bot_nav_pending:
-                        transaction.replace(R.id.fragment_container,new FragmentPendingTasks());
-                        transaction.commit();
+                        currentFragment=new FragmentPendingTasks();
                         break;
                     case R.id.bot_nav_all:
-                        transaction.replace(R.id.fragment_container,new FragmentAllTasks());
-                        transaction.commit();
+                        currentFragment=new FragmentAllTasks();
                         break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + item.getItemId());
                 }
+                transaction.replace(R.id.fragment_container,currentFragment);
+                transaction.commit();
                 return true;
             }
         });
@@ -108,6 +113,9 @@ public class MainActivity extends FragmentActivity {
     public void onDeleteCompletedTasksMenuClick(MenuItem item) {
         DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().deleteCompletedTask();
         Toast.makeText(this, R.string.toast_tasks_deleted, Toast.LENGTH_SHORT).show();
+        if (botNav.getSelectedItemId()==R.id.bot_nav_completed) {
+            ((FragmentCompletedTasks)currentFragment).updateTaskList();
+        }
     }
 
     public static java.util.Comparator<Task> getTaskComparator(){
@@ -201,7 +209,7 @@ public class MainActivity extends FragmentActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder=new AlertDialog.Builder(requireActivity());
             builder.setItems(R.array.sort_modes,this);
             builder.setTitle(R.string.menu_main_sort_by);
             return builder.create();
@@ -211,7 +219,7 @@ public class MainActivity extends FragmentActivity {
         public void onClick(DialogInterface dialog, int sortMode) {
             SharedPreferences.Editor editor=appInfo.edit();
             editor.putInt(PREF_SORTING,sortMode);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -221,7 +229,7 @@ public class MainActivity extends FragmentActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder=new AlertDialog.Builder(requireActivity());
             builder.setItems(R.array.export_or_import,this);
             builder.setTitle(R.string.menu_main_export_or_import);
             return builder.create();
@@ -235,13 +243,13 @@ public class MainActivity extends FragmentActivity {
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TITLE,"MemoExport.txt");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                getActivity().startActivityForResult(intent,REQUEST_CODE_EXPORT_MEMOS);
+                requireActivity().startActivityForResult(intent,REQUEST_CODE_EXPORT_MEMOS);
             } else {
                 //import
                 Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("text/plain");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                getActivity().startActivityForResult(intent,REQUEST_CODE_IMPORT_MEMOS);
+                requireActivity().startActivityForResult(intent,REQUEST_CODE_IMPORT_MEMOS);
             }
         }
     }
