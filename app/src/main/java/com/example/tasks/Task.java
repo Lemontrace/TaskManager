@@ -1,5 +1,7 @@
 package com.example.tasks;
 
+import android.annotation.SuppressLint;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -17,12 +19,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 
 @Entity
 class Task {
-    //attributes={"id","title","date","body"}
+
+    //attributes : id,title,body,date,completed,type
     Task(){
         //default values
         id=0;
@@ -32,7 +36,7 @@ class Task {
         completed=false;
     }
 
-    private static String DATE_NOT_SET="Date Not Set";
+    private static String STRING_DATE_NOT_SET ="Date Not Set";
 
     @PrimaryKey(autoGenerate = true)
     public int id;
@@ -95,10 +99,10 @@ class Task {
         //decoding attributes
         task.title=save.getOrDefault("title",""); //title
         task.body=save.getOrDefault("body",""); //body
-        String dateString=save.getOrDefault("date",DATE_NOT_SET);
-        task.date=getDateFromString(dateString); //date
+        String dateString=save.getOrDefault("date", STRING_DATE_NOT_SET);
+        task.date=getDateFromString(Objects.requireNonNull(dateString)); //date
         String completedString=save.getOrDefault("completed:%s","false");
-        task.completed=Boolean.valueOf(completedString);
+        task.completed=Boolean.parseBoolean(completedString);
         return task;
     }
 
@@ -120,12 +124,10 @@ class Task {
     }
 
     String getSaveString() {
-        String saveString =
-                String.format("title:%s\n", escaped(title)) +
-                String.format("body:%s\n", escaped(body)) +
-                String.format("date:%s\n", escaped(getDateString())) +
-                String.format("completed:%s\n", escaped(String.valueOf(completed)));
-        return saveString;
+        return String.format("title:%s\n", escaped(title)) +
+        String.format("body:%s\n", escaped(body)) +
+        String.format("date:%s\n", escaped(getDateString())) +
+        String.format("completed:%s\n", escaped(String.valueOf(completed)));
     }
 
     void saveToFile(File file) throws IOException {
@@ -138,21 +140,26 @@ class Task {
 
     String getDateString() {
         //date format:yyyy-mm-dd
+        return getDateString(date);
+    }
+
+    @SuppressLint("DefaultLocale")
+    static String getDateString(Date date) {
         if (date == null) {
-            return DATE_NOT_SET;
+            return STRING_DATE_NOT_SET;
         } else {
             return String.format("%d-%02d-%02d", date.year, date.month+1, date.day);
         }
     }
 
     static Date getDateFromString(String string) {
-        if (string.equals(DATE_NOT_SET)) {
+        if (string.equals(STRING_DATE_NOT_SET)) {
             return null;
         } else {
             String[] tokens=string.split("-");
-            int year=Integer.valueOf(tokens[0]);
-            int month=Integer.valueOf(tokens[1])-1;
-            int day=Integer.valueOf(tokens[2]);
+            int year=Integer.parseInt(tokens[0]);
+            int month=Integer.parseInt(tokens[1])-1;
+            int day=Integer.parseInt(tokens[2]);
             return new Date(year,month,day);
         }
 
@@ -161,8 +168,7 @@ class Task {
 
     //escapes \n and %(custom escaping)
     private static String escaped(String str) {
-        String escapedString=str.replace("%","%%").replace("\n","%n");
-        return escapedString;
+        return str.replace("%","%%").replace("\n","%n");
     }
 
     //unescape
@@ -205,7 +211,7 @@ class Task {
 interface TaskDao {
 
     @Query("SELECT * FROM Task")
-    public abstract List<Task> selectAll();
+    List<Task> selectAll();
 
     /*
     @Query("SELECT * FROM Task WHERE date BETWEEN :date1 AND :date2")
@@ -213,34 +219,34 @@ interface TaskDao {
     */
 
     @Query("SELECT * FROM Task WHERE date < :date")
-    public abstract List<Task> selectTaskBeforeDate(Date date);
+    List<Task> selectTaskBeforeDate(Date date);
 
     @Query("SELECT * FROM Task WHERE date > :date")
-    public abstract List<Task> selectTaskAfterDate(Date date);
+    List<Task> selectTaskAfterDate(Date date);
 
     @Query("SELECT * FROM Task WHERE date = :date")
-    public abstract List<Task> selectTaskAtDate(Date date);
+    List<Task> selectTaskAtDate(Date date);
 
     @Query("SELECT * FROM Task WHERE completed = :completed")
-    public abstract List<Task> selectByCompletedState(boolean completed);
+    List<Task> selectByCompletedState(boolean completed);
 
     @Query("SELECT * FROM Task WHERE date IS NULL")
-    public abstract List<Task> selectTaskWithoutDate();
+    List<Task> selectTaskWithoutDate();
 
     @Insert
-    public abstract void insertTask(Task task);
+    void insertTask(Task task);
 
     @Delete
-    public abstract void deleteTask(Task task);
+    void deleteTask(Task task);
 
     @Update
-    public abstract void updateTask(Task task);
+    void updateTask(Task task);
 
     @Query("SELECT * FROM Task WHERE id=:id")
-    public abstract Task selectTaskById(int id);
+    Task selectTaskById(int id);
 
     @Query("DELETE From Task WHERE completed = 1")
-    public abstract void deleteCompletedTask();
+    void deleteCompletedTask();
 
 }
 
