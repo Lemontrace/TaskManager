@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:labelFor="@id/title"
         android:text="@string/edit_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,11 +24,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="text"
         app:layout_constraintBaseline_toBaselineOf="@+id/edit_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/edit_title" />
+        app:layout_constraintStart_toEndOf="@+id/edit_title"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/edit_date"
@@ -43,9 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:labelFor="@id/body"
         android:text="@string/edit_body"
-        app:layout_constraintStart_toStartOf="@+id/edit_date"
-        app:layout_constraintTop_toBottomOf="@+id/edit_date" />
+        app:layout_constraintStart_toStartOf="@id/checkBoxRecurringTask"
+        app:layout_constraintTop_toBottomOf="@id/days" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -64,7 +67,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="start|top"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:autofillHints="" />
     </ScrollView>
 
     <Button
@@ -86,5 +90,109 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/edit_date"
         app:layout_constraintEnd_toStartOf="@+id/set_date"
         app:layout_constraintStart_toEndOf="@+id/edit_date" />
+
+    <CheckBox
+        android:id="@+id/checkBoxRecurringTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/recurring_task"
+        app:layout_constraintStart_toStartOf="@id/edit_date"
+        app:layout_constraintTop_toBottomOf="@+id/edit_date" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxRecurringTask"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxRecurringTask">
+
+        <CheckBox
+            android:id="@+id/checkBoxMonday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/monday_short"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/checkBoxTuesday"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/checkBoxTuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/tuesday_short"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/checkBoxWednesday"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxMonday"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/checkBoxWednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/wednesday_short"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/checkBoxThursday"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxTuesday"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/checkBoxThursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/thursday_short"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/checkBoxFriday"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxWednesday"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/checkBoxFriday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/friday_short"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/checkBoxSaturday"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxThursday"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/checkBoxSaturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/saturday_short"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/checkBoxSunday"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxFriday"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/checkBoxSunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/sunday_short"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxSaturday"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

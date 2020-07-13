@@ -49,10 +49,19 @@
 
     <string name="task_delete">Delete</string>
     <string name="task_mark_as_complete">mark as complete</string>
-    <string name="task_mark_as_incomplete">mark as imcomplete</string>
+    <string name="task_mark_as_incomplete">mark as incomplete</string>
     <string name="delete_all_completed_tasks">Delete completed tasks</string>
     <string name="toast_task_deleted">Task deleted</string>
     <string name="toast_tasks_deleted">Tasks deleted</string>
+    <string name="recurring_task">recurring task</string>
+    <string name="monday_short">Mon</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="thursday_short">Thu</string>
+    <string name="friday_short">Fri</string>
+    <string name="saturday_short">Sat</string>
+    <string name="sunday_short">Sun</string>
+    <string name="edit_starting_date">Starting date</string>
 
 
 </resources>

@@ -45,4 +45,13 @@
     <string name="delete_all_completed_tasks">완료된 할일 모두 삭제</string>
     <string name="toast_task_deleted">할일 삭제 완료!</string>
     <string name="toast_tasks_deleted">할일 삭제 완료!</string>
+    <string name="recurring_task">반복되는 할일</string>
+    <string name="monday_short">월</string>
+    <string name="tuesday_short">화</string>
+    <string name="wednesday_short">수</string>
+    <string name="thursday_short">목</string>
+    <string name="friday_short">금</string>
+    <string name="saturday_short">토</string>
+    <string name="sunday_short">일</string>
+    <string name="edit_starting_date">시작 날짜</string>
 </resources>
