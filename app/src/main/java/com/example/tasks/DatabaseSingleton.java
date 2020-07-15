@@ -9,11 +9,14 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 
-@Database(entities={Task.class},version=1,exportSchema = false)
-@TypeConverters({DateConverter.class})
+@Database(entities={Task.class,RecurringTask.class},version=2,exportSchema = false)
+@TypeConverters({DateConverter.class,RecurringTask.onDayConverter.class})
 abstract class AppDataBase extends RoomDatabase {
     public abstract TaskDao getTaskDao();
+    public abstract RecurringTaskDao getRecurringTaskDao();
 }
+
+//todo : write migration for database
 
 class DatabaseSingleton {
     private static DatabaseSingleton instance=null;

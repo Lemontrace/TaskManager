@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,7 +18,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaskAddActivity extends FragmentActivity {
 
@@ -31,23 +34,20 @@ public class TaskAddActivity extends FragmentActivity {
             Date today = Date.getToday();
 
             // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, today.year, today.month, today.day);
+            return new DatePickerDialog(requireContext(), this, today.year, today.month, today.day);
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             Date date=new Date(year,month,day);
-            TaskAddActivity activity=((TaskAddActivity)getActivity());
-            Task task=activity.task;
-            //set date
-            task.date=date;
+            ((TaskAddActivity)requireActivity()).date=date;
             //update dateView
-            TextView dateView=getActivity().findViewById(R.id.date);
-            dateView.setText(task.getDateString());
-            activity.updateDateSetButton();
+            TextView dateView=requireActivity().findViewById(R.id.date);
+            dateView.setText(Task.getDateString(date));
+            ((TaskAddActivity) requireActivity()).updateDateSetButton();
         }
     }
 
-    Task task;
+    Date date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,22 +62,19 @@ public class TaskAddActivity extends FragmentActivity {
                 TaskAddActivity.this.finish();
             }
         });
-        //task to add
-        task=new Task();
-
         updateDateSetButton();
     }
 
     public void onDateSetButtonClick(View view) {
-        if (task.date==null) {
+        if (date==null) {
             //date is not set : setting
             DatePickerFragment fragment=new DatePickerFragment();
             fragment.show(getSupportFragmentManager(),"Pick a date");
         } else {
             //date is set : unsetting
-            task.date=null;
+            date=null;
             TextView dateView=findViewById(R.id.date);
-            dateView.setText(task.getDateString());
+            dateView.setText(Task.getDateString(date));
         }
 
         updateDateSetButton();
@@ -86,23 +83,62 @@ public class TaskAddActivity extends FragmentActivity {
     void updateDateSetButton() {
         Button setDateButton=findViewById(R.id.set_date);
         //if date it set, 'set' button will unset the date
-        if (task.date!=null) {
+        if (date!=null) {
             setDateButton.setText(R.string.edit_unset_date);
         } else {
             setDateButton.setText(R.string.edit_set_date);
         }
     }
 
-    public void onConfirmButtonClick(View view) throws IOException {
-        //set memo attributes
-        EditText titleView= findViewById(R.id.title);
-        task.title=titleView.getText().toString();//set title
-        EditText bodyView= findViewById(R.id.body);
-        task.body=bodyView.getText().toString();//set body
-        //"date" is set with listener, so we don't need to worry about that
+    public void onRecurringTaskCheckBoxClick(View view) {
+        ViewGroup days=findViewById(R.id.days);
+        TextView date=findViewById(R.id.edit_date);
 
-        //add the memo object
-        DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().insertTask(task);
+        CheckBox checkBox=(CheckBox) view;
+        if (checkBox.isChecked()) {
+            days.setVisibility(View.VISIBLE);
+            date.setText(R.string.edit_starting_date);
+        } else {
+            days.setVisibility(View.GONE);
+            date.setText(R.string.edit_date);
+        }
+    }
+
+    public void onConfirmButtonClick(View view) {
+
+        CheckBox checkBox=findViewById(R.id.checkBoxRecurringTask);
+        boolean isRecurring=checkBox.isChecked();
+        if (isRecurring) {
+            RecurringTask recurringTask=new RecurringTask();
+            //set task attributes
+            EditText titleView= findViewById(R.id.title);
+            recurringTask.title=titleView.getText().toString();//set title
+            EditText bodyView= findViewById(R.id.body);
+            recurringTask.body=bodyView.getText().toString();//set body
+            recurringTask.date=date; //set date
+
+
+            ViewGroup days=findViewById(R.id.days);
+            List<Boolean> onDay = new ArrayList<>();
+
+            //check checked state and save it to onDay
+            for (int i = 0; i < 7; i++) {
+                onDay.add(((CheckBox)days.getChildAt(i)).isChecked());
+            }
+            recurringTask.onDay=onDay;
+            //add the memo object
+            DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getRecurringTaskDao().insertRecurringTask(recurringTask);
+        } else {
+            Task task=new Task();
+            //set task attributes
+            EditText titleView= findViewById(R.id.title);
+            task.title=titleView.getText().toString();//set title
+            EditText bodyView= findViewById(R.id.body);
+            task.body=bodyView.getText().toString();//set body
+            task.date=date; //set date
+            // add the memo object
+            DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().insertTask(task);
+        }
 
         //finish activity
         finish();
