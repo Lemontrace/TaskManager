@@ -16,20 +16,21 @@ import java.util.List;
 @Entity
 class RecurringTask {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
+    public int id;
+
     RecurringTask() {
         //default values
-        id=0;
-        title="";
-        body="";
-        date=null;
+        id = 0;
+        title = "";
+        body = "";
+        date = null;
         onDay = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            onDay.set(i,true);
+            onDay.add(true);
         }
     }
-
-    @PrimaryKey(autoGenerate = true)
-    public int id;
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public String title;
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)

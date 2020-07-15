@@ -39,6 +39,7 @@ class Task {
     private static String STRING_DATE_NOT_SET ="Date Not Set";
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
     public int id;
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public String title;

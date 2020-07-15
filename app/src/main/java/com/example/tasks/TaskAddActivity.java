@@ -53,7 +53,7 @@ public class TaskAddActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_add);
         //set up appbar
-        Toolbar appbar=findViewById(R.id.appbar_memo_add);
+        Toolbar appbar = findViewById(R.id.appbar_memo_add);
         //'up' button
         appbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +63,9 @@ public class TaskAddActivity extends FragmentActivity {
             }
         });
         updateDateSetButton();
+
+        //initially, the task is not recurring
+        findViewById(R.id.days).setVisibility(View.GONE);
     }
 
     public void onDateSetButtonClick(View view) {
@@ -126,6 +129,7 @@ public class TaskAddActivity extends FragmentActivity {
                 onDay.add(((CheckBox)days.getChildAt(i)).isChecked());
             }
             recurringTask.onDay=onDay;
+
             //add the memo object
             DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getRecurringTaskDao().insertRecurringTask(recurringTask);
         } else {
