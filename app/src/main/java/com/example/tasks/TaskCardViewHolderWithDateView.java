@@ -18,9 +18,9 @@ abstract class TaskCardViewHolderWithDateView extends TaskCardViewHolder {
     }
 
     @Override
-    void bindTo(final Task task) {
-        super.bindTo(task);
-        if (dateColor!=null) dateView.setTextColor(dateColor);
+    void bindTo(final TaskDataProvider taskData) {
+        super.bindTo(taskData);
+        if (dateColor != null) dateView.setTextColor(dateColor);
     }
 
 }

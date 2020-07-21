@@ -1,16 +1,16 @@
 package com.example.tasks;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -35,33 +35,38 @@ public class FragmentAllTasks extends Fragment{
         super.onStart();
 
         //set appbar title
-        Toolbar appbar=getActivity().findViewById(R.id.appbar_main);
+        Toolbar appbar = requireActivity().findViewById(R.id.appbar_main);
         appbar.setTitle(R.string.main_bot_nav_all);
 
-        //get all tasks and sort them
-        List<Task> allTasks = DatabaseSingleton.getInstance(getContext()).dataBase.getTaskDao().selectAll();
-        Predicate<Task> isTaskCompleted=new Predicate<Task>() {
+        //get all non-recurring, incomplete tasks
+        List<Task> tasks = DatabaseSingleton.getInstance(getContext()).dataBase.getTaskDao().selectAll();
+        tasks.removeIf(new Predicate<Task>() {
             @Override
             public boolean test(Task task) {
                 return task.completed;
             }
-        };
-        allTasks.removeIf(isTaskCompleted);
-        allTasks.sort(MainActivity.getTaskComparator());
+        });
+
+        //get recurring tasks
+        List<RecurringTask> recurringTasks = DatabaseSingleton.getInstance((getContext())).dataBase.getRecurringTaskDao().selectAll();
+
+        List<TaskDataProvider> TaskDatas = new ArrayList<>();
+        TaskDatas.addAll(tasks);
+        TaskDatas.addAll(recurringTasks);
 
 
         //set up recyclerView
-        RecyclerView taskViewAll=getActivity().findViewById(R.id.taskview);
+        RecyclerView taskViewAll = requireActivity().findViewById(R.id.taskview);
         taskViewAll.setLayoutManager(new LinearLayoutManager(getContext()));
         //get viewHolder factory
-        TaskCardViewHolderFactory factory=
+        TaskCardViewHolderFactory factory =
                 new TaskCardViewHolderAutoDate.TaskCardViewHolderAutoDateFactory(null, null,
-                        getResources().getColor(R.color.colorPrimaryDark,null), getResources().getColor(R.color.colorAccent,null));
+                        getResources().getColor(R.color.colorPrimaryDark, null), getResources().getColor(R.color.colorAccent, null));
         //get adapter with the factory
         TaskListAdapter adapter = TaskListAdapter.getInstance(factory);
         //set adapter
         taskViewAll.setAdapter(adapter);
         //update tasks
-        adapter.submitList(allTasks);
+        adapter.submitList(TaskDatas);
     }
 }

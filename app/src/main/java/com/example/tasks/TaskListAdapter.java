@@ -6,24 +6,24 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-class TaskListAdapter extends ListAdapter<Task,TaskCardViewHolder> {
-    TaskListAdapter(@NonNull DiffUtil.ItemCallback<Task> diffCallback) {
+class TaskListAdapter extends ListAdapter<TaskDataProvider, TaskCardViewHolder> {
+    TaskListAdapter(@NonNull DiffUtil.ItemCallback<TaskDataProvider> diffCallback) {
         super(diffCallback);
     }
 
     private TaskCardViewHolderFactory viewHolderFactory;
 
     static TaskListAdapter getInstance(TaskCardViewHolderFactory factory) {
-        TaskListAdapter adapter=new TaskListAdapter(new DiffUtil.ItemCallback<Task>() {
+        TaskListAdapter adapter = new TaskListAdapter(new DiffUtil.ItemCallback<TaskDataProvider>() {
             @Override
-            public boolean areItemsTheSame(@NonNull Task oldItem, @NonNull Task newItem) {
-                return oldItem.id==newItem.id;
+            public boolean areItemsTheSame(@NonNull TaskDataProvider oldItem, @NonNull TaskDataProvider newItem) {
+                return oldItem.getId().equals(newItem.getId());
             }
 
             @Override
-            public boolean areContentsTheSame(@NonNull Task oldItem, @NonNull Task newItem) {
+            public boolean areContentsTheSame(@NonNull TaskDataProvider oldItem, @NonNull TaskDataProvider newItem) {
                 //compares title and date of the tasks for equality
-                return oldItem.title.equals(newItem.title) && Date.isEqual(oldItem.date,newItem.date);
+                return oldItem.getTitle().equals(newItem.getTitle()) && Date.isEqual(oldItem.getDate(), newItem.getDate());
             }
         });
 
@@ -39,8 +39,8 @@ class TaskListAdapter extends ListAdapter<Task,TaskCardViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TaskCardViewHolder holder, int position) {
-        Task task=getCurrentList().get(position);
-        holder.bindTo(task);
+        TaskDataProvider taskData = getCurrentList().get(position);
+        holder.bindTo(taskData);
     }
 
 

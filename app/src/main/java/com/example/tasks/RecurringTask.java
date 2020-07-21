@@ -14,11 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-class RecurringTask {
+class RecurringTask implements TaskDataProvider {
+
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
     public int id;
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    public String title;
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    public String body;
+    @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
+    public Date date;
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    public List<Boolean> onDay;
+
 
     RecurringTask() {
         //default values
@@ -31,21 +41,34 @@ class RecurringTask {
             onDay.add(true);
         }
     }
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    public String title;
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    public String body;
-    @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
-    public Date date;
-    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-    public List<Boolean> onDay;
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public Date getDate() {
+        //todo : make this function return next occurrence of this task
+        return date;
+    }
+
+    @Override
+    public Integer getTaskType() {
+        return TASK_TYPE_RECURRING_TASK;
+    }
 
     public static class onDayConverter {
 
         //converts list of length 7 to bitstring of the same length
         @TypeConverter
         public static String encode(List<Boolean> onDay) {
-            StringBuilder result= new StringBuilder();
+            StringBuilder result = new StringBuilder();
             for (int i = 0; i < 7; i++) {
                 if (onDay.get(i)) {
                     result.append(1);

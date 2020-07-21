@@ -14,12 +14,12 @@ class TaskCardViewHolderExactDate extends TaskCardViewHolderWithDateView {
     }
 
     @Override
-    void bindTo(final Task task) {
-        super.bindTo(task);
-        if (task.date==null) {
+    void bindTo(final TaskDataProvider taskData) {
+        super.bindTo(taskData);
+        if (taskData.getDate() == null) {
             dateView.setText(R.string.date_not_set);
         } else {
-            dateView.setText(task.getDateString());
+            dateView.setText(Date.getDateString(taskData.getDate()));
         }
     }
 

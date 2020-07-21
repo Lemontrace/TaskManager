@@ -1,7 +1,5 @@
 package com.example.tasks;
 
-import android.annotation.SuppressLint;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -22,21 +20,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static com.example.tasks.Date.STRING_DATE_NOT_SET;
+
 
 @Entity
-class Task {
+class Task implements TaskDataProvider {
 
     //attributes : id,title,body,date,completed,type
-    Task(){
+    Task() {
         //default values
-        id=0;
-        title="";
-        body="";
-        date=null;
-        completed=false;
+        id = 0;
+        title = "";
+        body = "";
+        date = null;
+        completed = false;
     }
-
-    private static String STRING_DATE_NOT_SET ="Date Not Set";
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
@@ -139,57 +137,42 @@ class Task {
         fileWriter.close();
     }
 
-    String getDateString() {
-        //date format:yyyy-mm-dd
-        return getDateString(date);
-    }
-
-    @SuppressLint("DefaultLocale")
-    static String getDateString(Date date) {
-        if (date == null) {
-            return STRING_DATE_NOT_SET;
-        } else {
-            return String.format("%d-%02d-%02d", date.year, date.month+1, date.day);
-        }
-    }
-
     static Date getDateFromString(String string) {
         if (string.equals(STRING_DATE_NOT_SET)) {
             return null;
         } else {
-            String[] tokens=string.split("-");
-            int year=Integer.parseInt(tokens[0]);
-            int month=Integer.parseInt(tokens[1])-1;
-            int day=Integer.parseInt(tokens[2]);
-            return new Date(year,month,day);
+            String[] tokens = string.split("-");
+            int year = Integer.parseInt(tokens[0]);
+            int month = Integer.parseInt(tokens[1]) - 1;
+            int day = Integer.parseInt(tokens[2]);
+            return new Date(year, month, day);
         }
 
     }
 
-
     //escapes \n and %(custom escaping)
     private static String escaped(String str) {
-        return str.replace("%","%%").replace("\n","%n");
+        return str.replace("%", "%%").replace("\n", "%n");
     }
 
     //unescape
     static String unescaped(String str) {
         char current;
         char next;
-        java.util.ArrayList<String> unescaped=new ArrayList<>();
-        for(int i=0;i<str.length();i++) {
-            current=str.charAt(i);
-            if (i==str.length()-1) {
-                next=' ';
+        java.util.ArrayList<String> unescaped = new ArrayList<>();
+        for (int i = 0; i < str.length(); i++) {
+            current = str.charAt(i);
+            if (i == str.length() - 1) {
+                next = ' ';
             } else {
-                next=str.charAt(i+1);
+                next = str.charAt(i + 1);
             }
 
-            if (current=='%') {
-                if (next=='%') {
+            if (current == '%') {
+                if (next == '%') {
                     unescaped.add("%");
                     i++;
-                } else if (next=='n'){
+                } else if (next == 'n') {
                     unescaped.add("\n");
                     i++;
                 }
@@ -197,13 +180,37 @@ class Task {
                 unescaped.add(String.valueOf(current));
             }
         }
-        StringBuilder sb=new StringBuilder();
-        for(String ch:unescaped){
+        StringBuilder sb = new StringBuilder();
+        for (String ch : unescaped) {
             sb.append(ch);
         }
         return sb.toString();
     }
 
+    String getDateString() {
+        //date format:yyyy-mm-dd
+        return Date.getDateString(date);
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public Date getDate() {
+        return date;
+    }
+
+    @Override
+    public Integer getTaskType() {
+        return TASK_TYPE_TASK;
+    }
 
 
 }

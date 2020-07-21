@@ -18,18 +18,18 @@ class TaskCardViewHolderAutoDate extends TaskCardViewHolderWithDateView {
     }
 
     @Override
-    void bindTo(final Task task) {
-        super.bindTo(task);
-        if (task.date==null) {
+    void bindTo(final TaskDataProvider taskData) {
+        super.bindTo(taskData);
+        if (taskData.getDate() == null) {
             //date not set
             dateView.setText(R.string.date_not_set);
-        } else if (Date.isEqual(task.date,Date.getToday())){
+        } else if (Date.isEqual(taskData.getDate(), Date.getToday())) {
             //today
             dateView.setText(R.string.today);
             if (dateColorToday != null) dateView.setTextColor(dateColorToday);
-        } else{
-            dateView.setText(task.getDateString());
-            if (task.date.compareTo(Date.getToday())<0){
+        } else {
+            dateView.setText(Date.getDateString(taskData.getDate()));
+            if (taskData.getDate().compareTo(Date.getToday()) < 0) {
                 //overdue
                 if (dateColorOverdue != null) dateView.setTextColor(dateColorOverdue);
             }

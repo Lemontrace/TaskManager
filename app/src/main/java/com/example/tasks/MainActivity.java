@@ -33,9 +33,6 @@ import java.util.HashMap;
 
 public class MainActivity extends FragmentActivity {
 
-    //Extra keys for getting the memo to work on
-    public static final String EXTRA_TASK_ID ="task_id";
-
     static final String PREF_SORTING="sorting";
         //those values are set so that it matches the index of each mode in string-array resource
         static final int SORTING_DATE_ASC=0;

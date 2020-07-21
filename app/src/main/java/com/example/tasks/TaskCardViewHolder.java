@@ -23,19 +23,20 @@ abstract class TaskCardViewHolder extends RecyclerView.ViewHolder {
         titleView=(TextView) linearLayout.getChildAt(0);
     }
 
-    void bindTo(final Task task) {
+    void bindTo(final TaskDataProvider taskData) {
         card.setClickable(true);
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TaskDisplayActivity.launchActivity(TaskCardViewHolder.this.card.getContext(),task.id);
+                //todo make it possible to display all task types
+                TaskDisplayActivity.launchActivity(TaskCardViewHolder.this.card.getContext(), taskData.getTaskType(), taskData.getId());
             }
         });
-        if (task.title.isEmpty()) {
+        if (taskData.getTitle().isEmpty()) {
             titleView.setText(R.string.no_title);
         } else {
-            titleView.setText(task.title);
+            titleView.setText(taskData.getTitle());
         }
-        if (titleColor!=null) titleView.setTextColor(titleColor);
+        if (titleColor != null) titleView.setTextColor(titleColor);
     }
 }
