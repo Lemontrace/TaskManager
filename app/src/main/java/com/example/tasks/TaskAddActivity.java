@@ -24,30 +24,23 @@ import java.util.List;
 public class TaskAddActivity extends FragmentActivity {
 
 
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            Date today = Date.getToday();
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(requireContext(), this, today.year, today.month, today.day);
+    public void onDateSetButtonClick(View view) {
+        if (date == null) {
+            //date is not set : setting
+            DatePickerFragment fragment = new DatePickerFragment();
+            fragment.show(getSupportFragmentManager(), "Pick a date");
+        } else {
+            //date is set : unsetting
+            date = null;
+            TextView dateView = findViewById(R.id.date);
+            dateView.setText(Date.getDateString(date));
         }
 
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            Date date=new Date(year,month,day);
-            ((TaskAddActivity)requireActivity()).date=date;
-            //update dateView
-            TextView dateView=requireActivity().findViewById(R.id.date);
-            dateView.setText(Task.getDateString(date));
-            ((TaskAddActivity) requireActivity()).updateDateSetButton();
-        }
+        updateDateSetButton();
     }
 
     Date date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,25 +61,10 @@ public class TaskAddActivity extends FragmentActivity {
         findViewById(R.id.days).setVisibility(View.GONE);
     }
 
-    public void onDateSetButtonClick(View view) {
-        if (date==null) {
-            //date is not set : setting
-            DatePickerFragment fragment=new DatePickerFragment();
-            fragment.show(getSupportFragmentManager(),"Pick a date");
-        } else {
-            //date is set : unsetting
-            date=null;
-            TextView dateView=findViewById(R.id.date);
-            dateView.setText(Task.getDateString(date));
-        }
-
-        updateDateSetButton();
-    }
-
     void updateDateSetButton() {
-        Button setDateButton=findViewById(R.id.set_date);
+        Button setDateButton = findViewById(R.id.set_date);
         //if date it set, 'set' button will unset the date
-        if (date!=null) {
+        if (date != null) {
             setDateButton.setText(R.string.edit_unset_date);
         } else {
             setDateButton.setText(R.string.edit_set_date);
@@ -94,10 +72,10 @@ public class TaskAddActivity extends FragmentActivity {
     }
 
     public void onRecurringTaskCheckBoxClick(View view) {
-        ViewGroup days=findViewById(R.id.days);
-        TextView date=findViewById(R.id.edit_date);
+        ViewGroup days = findViewById(R.id.days);
+        TextView date = findViewById(R.id.edit_date);
 
-        CheckBox checkBox=(CheckBox) view;
+        CheckBox checkBox = (CheckBox) view;
         if (checkBox.isChecked()) {
             days.setVisibility(View.VISIBLE);
             date.setText(R.string.edit_starting_date);
@@ -107,15 +85,38 @@ public class TaskAddActivity extends FragmentActivity {
         }
     }
 
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            Date today = Date.getToday();
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(requireContext(), this, today.year, today.month, today.day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            Date date = new Date(year, month, day);
+            ((TaskAddActivity) requireActivity()).date = date;
+            //update dateView
+            TextView dateView = requireActivity().findViewById(R.id.date);
+            dateView.setText(Date.getDateString(date));
+            ((TaskAddActivity) requireActivity()).updateDateSetButton();
+        }
+    }
+
     public void onConfirmButtonClick(View view) {
 
-        CheckBox checkBox=findViewById(R.id.checkBoxRecurringTask);
-        boolean isRecurring=checkBox.isChecked();
+        CheckBox checkBox = findViewById(R.id.checkBoxRecurringTask);
+        boolean isRecurring = checkBox.isChecked();
         if (isRecurring) {
-            RecurringTask recurringTask=new RecurringTask();
+            RecurringTask recurringTask = new RecurringTask();
             //set task attributes
-            EditText titleView= findViewById(R.id.title);
-            recurringTask.title=titleView.getText().toString();//set title
+            EditText titleView = findViewById(R.id.title);
+            recurringTask.title = titleView.getText().toString();//set title
             EditText bodyView= findViewById(R.id.body);
             recurringTask.body=bodyView.getText().toString();//set body
             recurringTask.date=date; //set date
@@ -130,7 +131,7 @@ public class TaskAddActivity extends FragmentActivity {
             }
             recurringTask.onDay=onDay;
 
-            //add the memo object
+            //add the recurring task object
             DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getRecurringTaskDao().insertRecurringTask(recurringTask);
         } else {
             Task task=new Task();
@@ -140,7 +141,7 @@ public class TaskAddActivity extends FragmentActivity {
             EditText bodyView= findViewById(R.id.body);
             task.body=bodyView.getText().toString();//set body
             task.date=date; //set date
-            // add the memo object
+            // add the task object
             DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().insertTask(task);
         }
 

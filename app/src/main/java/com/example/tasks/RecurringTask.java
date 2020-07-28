@@ -1,5 +1,6 @@
 package com.example.tasks;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -28,6 +29,8 @@ class RecurringTask implements TaskDataProvider {
     public Date date;
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public List<Boolean> onDay;
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    public List<Date> completedDates;
 
 
     RecurringTask() {
@@ -40,6 +43,7 @@ class RecurringTask implements TaskDataProvider {
         for (int i = 0; i < 7; i++) {
             onDay.add(true);
         }
+        completedDates = new ArrayList<>();
     }
 
     @Override
@@ -65,7 +69,7 @@ class RecurringTask implements TaskDataProvider {
 
     public static class onDayConverter {
 
-        //converts list of length 7 to bitstring of the same length
+        //converts boolean list of length 7 to bitstring of the same length
         @TypeConverter
         public static String encode(List<Boolean> onDay) {
             StringBuilder result = new StringBuilder();
@@ -79,19 +83,56 @@ class RecurringTask implements TaskDataProvider {
             return result.toString();
         }
 
-        //converts bitstring of length 7 to list of the same length
+        //converts bitstring of length 7 to boolean list of the same length
         @TypeConverter
         public static List<Boolean> decode(String string) {
             List<Boolean> result=new ArrayList<>();
             for (int i = 0; i < 7; i++) {
-                if (string.charAt(i)=='1') {
-                    result.set(i,true);
+                if (string.charAt(i) == '1') {
+                    result.add(true);
                 } else {
-                    result.set(i,false);
+                    result.add(false);
                 }
             }
             return result;
         }
+    }
+
+    public static class completedDatesConverter {
+
+        //converts list of dates to string of dates separated by \n(newline)
+        //returns null when the list is empty
+        @TypeConverter
+        public static String encode(List<Date> completedDates) {
+            //the list is empty
+            if (completedDates.isEmpty()) return null;
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < completedDates.size() - 1; i++) {
+                stringBuilder.append(completedDates.get(i).toString());
+                stringBuilder.append("\n");
+            }
+            stringBuilder.append(completedDates.get(completedDates.size() - 1));
+
+            return stringBuilder.toString();
+        }
+
+        //converts string of dates separated by \n(newline) to list of dates
+        //string can be null in which case empty list is returned
+        @TypeConverter
+        public static List<Date> decode(@Nullable String string) {
+
+            if (string == null) return new ArrayList<>();
+
+            List<Date> completedDates = new ArrayList<>();
+            String[] dateStringArray = string.split("\n");
+            for (String dateString : dateStringArray) {
+                completedDates.add(Date.decodeDateString(dateString));
+            }
+            return completedDates;
+        }
+
     }
 }
 

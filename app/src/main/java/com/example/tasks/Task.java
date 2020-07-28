@@ -99,7 +99,7 @@ class Task implements TaskDataProvider {
         task.title=save.getOrDefault("title",""); //title
         task.body=save.getOrDefault("body",""); //body
         String dateString=save.getOrDefault("date", STRING_DATE_NOT_SET);
-        task.date=getDateFromString(Objects.requireNonNull(dateString)); //date
+        task.date = Date.decodeDateString(Objects.requireNonNull(dateString)); //date
         String completedString=save.getOrDefault("completed:%s","false");
         task.completed=Boolean.parseBoolean(completedString);
         return task;
@@ -124,9 +124,9 @@ class Task implements TaskDataProvider {
 
     String getSaveString() {
         return String.format("title:%s\n", escaped(title)) +
-        String.format("body:%s\n", escaped(body)) +
-        String.format("date:%s\n", escaped(getDateString())) +
-        String.format("completed:%s\n", escaped(String.valueOf(completed)));
+                String.format("body:%s\n", escaped(body)) +
+                String.format("date:%s\n", escaped(date.toString())) +
+                String.format("completed:%s\n", escaped(String.valueOf(completed)));
     }
 
     void saveToFile(File file) throws IOException {
@@ -135,19 +135,6 @@ class Task implements TaskDataProvider {
         fileWriter.write(getSaveString());
         //close file
         fileWriter.close();
-    }
-
-    static Date getDateFromString(String string) {
-        if (string.equals(STRING_DATE_NOT_SET)) {
-            return null;
-        } else {
-            String[] tokens = string.split("-");
-            int year = Integer.parseInt(tokens[0]);
-            int month = Integer.parseInt(tokens[1]) - 1;
-            int day = Integer.parseInt(tokens[2]);
-            return new Date(year, month, day);
-        }
-
     }
 
     //escapes \n and %(custom escaping)
@@ -185,11 +172,6 @@ class Task implements TaskDataProvider {
             sb.append(ch);
         }
         return sb.toString();
-    }
-
-    String getDateString() {
-        //date format:yyyy-mm-dd
-        return Date.getDateString(date);
     }
 
     @Override

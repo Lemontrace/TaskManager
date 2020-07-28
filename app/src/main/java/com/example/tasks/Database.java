@@ -3,23 +3,19 @@ package com.example.tasks;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-import androidx.room.migration.Migration;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
 
-@Database(entities={Task.class,RecurringTask.class},version=2,exportSchema = false)
-@TypeConverters({DateConverter.class,RecurringTask.onDayConverter.class})
+@Database(entities = {Task.class, RecurringTask.class}, version = 1, exportSchema = false)
+@TypeConverters({DateConverter.class, RecurringTask.onDayConverter.class, RecurringTask.completedDatesConverter.class})
 abstract class AppDataBase extends RoomDatabase {
     public abstract TaskDao getTaskDao();
     public abstract RecurringTaskDao getRecurringTaskDao();
 }
 
-//todo : write migration for database
 
 class DatabaseSingleton {
     private static DatabaseSingleton instance = null;
@@ -29,6 +25,7 @@ class DatabaseSingleton {
 
     }
 
+    /*
     static final Migration MIGRATION_FROM_1_TO_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
@@ -42,10 +39,11 @@ class DatabaseSingleton {
 
         }
     };
+     */
 
     static DatabaseSingleton getInstance(Context context) {
         if (instance == null) {
-            AppDataBase db = Room.databaseBuilder(context, AppDataBase.class, "app-database").addMigrations(MIGRATION_FROM_1_TO_2).allowMainThreadQueries().build();
+            AppDataBase db = Room.databaseBuilder(context, AppDataBase.class, "app-database").allowMainThreadQueries().build();
             instance = new DatabaseSingleton();
             instance.dataBase = db;
         }

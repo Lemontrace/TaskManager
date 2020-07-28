@@ -28,8 +28,15 @@ abstract class TaskCardViewHolder extends RecyclerView.ViewHolder {
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo make it possible to display all task types
-                TaskDisplayActivity.launchActivity(TaskCardViewHolder.this.card.getContext(), taskData.getTaskType(), taskData.getId());
+
+                if (taskData.getTaskType().equals(TaskDataProvider.TASK_TYPE_TASK)) {
+                    TaskDisplayActivity.launchActivity(TaskCardViewHolder.this.card.getContext(), taskData.getId());
+                } else if (taskData.getTaskType().equals(TaskDataProvider.TASK_TYPE_RECURRING_TASK)) {
+                    RecurringTaskDisplayActivity.launchActivity(TaskCardViewHolder.this.card.getContext(), taskData.getId());
+                } else {
+                    throw new IllegalStateException("unidentified task type");
+                }
+
             }
         });
         if (taskData.getTitle().isEmpty()) {

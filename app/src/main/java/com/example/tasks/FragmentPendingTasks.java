@@ -1,16 +1,16 @@
 package com.example.tasks;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -35,7 +35,7 @@ public class FragmentPendingTasks extends Fragment{
         super.onStart();
 
         //set appbar title
-        Toolbar appbar=getActivity().findViewById(R.id.appbar_main);
+        Toolbar appbar = requireActivity().findViewById(R.id.appbar_main);
         appbar.setTitle(R.string.main_bot_nav_pending);
 
         //get dao
@@ -65,7 +65,7 @@ public class FragmentPendingTasks extends Fragment{
 
 
         //set up recyclerviews and their adapters
-        View noDateView=getActivity().findViewById(R.id.include_no_date);
+        View noDateView = requireActivity().findViewById(R.id.include_no_date);
         if (noDateTasks.isEmpty()) {
             //hide overdue task view
             noDateView.setVisibility(View.GONE);
@@ -73,7 +73,7 @@ public class FragmentPendingTasks extends Fragment{
             //show overdue task view
             noDateView.setVisibility(View.VISIBLE);
             //set up recyclerView
-            RecyclerView taskViewNoDate=getActivity().findViewById(R.id.taskview_no_date);
+            RecyclerView taskViewNoDate = requireActivity().findViewById(R.id.taskview_no_date);
             taskViewNoDate.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //default colors
@@ -85,10 +85,10 @@ public class FragmentPendingTasks extends Fragment{
             //set adapter
             taskViewNoDate.setAdapter(noDateAdapter);
             //update tasks
-            noDateAdapter.submitList(noDateTasks);
+            noDateAdapter.submitList(new ArrayList<TaskDataProvider>(noDateTasks));
         }
 
-        View overDueView=getActivity().findViewById(R.id.include_overdue);
+        View overDueView = requireActivity().findViewById(R.id.include_overdue);
         if (overDueTasks.isEmpty()) {
             //hide overdue task view
             overDueView.setVisibility(View.GONE);
@@ -96,7 +96,7 @@ public class FragmentPendingTasks extends Fragment{
             //show overdue task view
             overDueView.setVisibility(View.VISIBLE);
             //set up recyclerView
-            RecyclerView taskViewOverDue=getActivity().findViewById(R.id.taskview_overdue);
+            RecyclerView taskViewOverDue = requireActivity().findViewById(R.id.taskview_overdue);
             taskViewOverDue.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //dark color for date
@@ -109,10 +109,10 @@ public class FragmentPendingTasks extends Fragment{
             taskViewOverDue.setAdapter(overDueAdapter);
             //update tasks
             overDueTasks.sort(new Task.DateComparator(true));
-            overDueAdapter.submitList(overDueTasks);
+            overDueAdapter.submitList(new ArrayList<TaskDataProvider>(overDueTasks));
         }
 
-        View todayView=getActivity().findViewById(R.id.include_today);
+        View todayView = requireActivity().findViewById(R.id.include_today);
         if (todayTasks.isEmpty()) {
             //hide today task view
             todayView.setVisibility(View.GONE);
@@ -120,7 +120,7 @@ public class FragmentPendingTasks extends Fragment{
             //show today task view
             todayView.setVisibility(View.VISIBLE);
             //set up recyclerView
-            RecyclerView taskViewToday=getActivity().findViewById(R.id.taskview_today);
+            RecyclerView taskViewToday = requireActivity().findViewById(R.id.taskview_today);
             taskViewToday.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //accent color for date
@@ -132,12 +132,12 @@ public class FragmentPendingTasks extends Fragment{
             //set adapter
             taskViewToday.setAdapter(todayAdapter);
             //update tasks
-            todayAdapter.submitList(todayTasks);
+            todayAdapter.submitList(new ArrayList<TaskDataProvider>(todayTasks));
         }
 
 
         //display message if there is no pending task
-        View noPendingTaskInclude=getActivity().findViewById(R.id.include_no_pending_task);
+        View noPendingTaskInclude = requireActivity().findViewById(R.id.include_no_pending_task);
         if (overDueTasks.isEmpty()&&todayTasks.isEmpty()&&noDateTasks.isEmpty()) {
             noPendingTaskInclude.setVisibility(View.VISIBLE);
         } else {

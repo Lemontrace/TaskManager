@@ -2,6 +2,7 @@ package com.example.tasks;
 
 import android.annotation.SuppressLint;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Calendar;
@@ -12,8 +13,6 @@ class Date {
     int month;
     int day;
 
-
-    Date(){}
 
     Date(int year, int month, int day) {
         this.year=year;
@@ -64,6 +63,25 @@ class Date {
         } else {
             return String.format("%d-%02d-%02d", date.year, date.month + 1, date.day);
         }
+    }
+
+    static Date decodeDateString(String string) {
+        if (string.equals(STRING_DATE_NOT_SET)) {
+            return null;
+        } else {
+            String[] tokens = string.split("-");
+            int year = Integer.parseInt(tokens[0]);
+            int month = Integer.parseInt(tokens[1]) - 1;
+            int day = Integer.parseInt(tokens[2]);
+            return new Date(year, month, day);
+        }
+
+    }
+
+    @Override
+    @NonNull
+    public String toString() {
+        return Date.getDateString(this);
     }
 
 }
