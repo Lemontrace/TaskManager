@@ -55,7 +55,7 @@ public class FragmentCompletedTasks extends Fragment {
 
     public void updateTaskList() {
         //get completed tasks and sort them
-        List<Task> completedTasks = DatabaseSingleton.getInstance(getContext()).dataBase.getTaskDao().selectByCompletedState(true);
+        List<Task> completedTasks = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getTaskDao().selectByCompletedState(true);
         completedTasks.sort(MainActivity.getTaskComparator());
         //update tasks
         adapter.submitList(new ArrayList<TaskDataProvider>(completedTasks));

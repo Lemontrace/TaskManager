@@ -108,7 +108,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onDeleteCompletedTasksMenuClick(MenuItem item) {
-        DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().deleteCompletedTask();
+        DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().deleteCompletedTask();
         Toast.makeText(this, R.string.toast_tasks_deleted, Toast.LENGTH_SHORT).show();
         if (botNav.getSelectedItemId()==R.id.bot_nav_completed) {
             ((FragmentCompletedTasks)currentFragment).updateTaskList();
@@ -138,7 +138,7 @@ public class MainActivity extends FragmentActivity {
             assert pfd != null;
             FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
             //write each Memo's saveString
-            for (Task task : DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().selectAll()) {
+            for (Task task : DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().selectAll()) {
                 fileOutputStream.write(task.getSaveString().getBytes());
                 //indicates end of memo
                 fileOutputStream.write(":\n".getBytes());
@@ -191,7 +191,7 @@ public class MainActivity extends FragmentActivity {
 
             //save tasks
             for (Task task : tasksToAdd) {
-                DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().insertTask(task);
+                DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().insertTask(task);
             }
 
             Toast.makeText(this, R.string.toast_import_success, Toast.LENGTH_LONG).show();

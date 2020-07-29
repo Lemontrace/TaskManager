@@ -132,7 +132,7 @@ public class TaskAddActivity extends FragmentActivity {
             recurringTask.onDay=onDay;
 
             //add the recurring task object
-            DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getRecurringTaskDao().insertRecurringTask(recurringTask);
+            DatabaseHolder.getDatabase(getApplicationContext()).getRecurringTaskDao().insertRecurringTask(recurringTask);
         } else {
             Task task=new Task();
             //set task attributes
@@ -142,7 +142,7 @@ public class TaskAddActivity extends FragmentActivity {
             task.body=bodyView.getText().toString();//set body
             task.date=date; //set date
             // add the task object
-            DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().insertTask(task);
+            DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().insertTask(task);
         }
 
         //finish activity

@@ -17,12 +17,11 @@ abstract class AppDataBase extends RoomDatabase {
 }
 
 
-class DatabaseSingleton {
-    private static DatabaseSingleton instance = null;
-    AppDataBase dataBase;
+class DatabaseHolder {
+    private static AppDataBase database = null;
 
-    private DatabaseSingleton() {
-
+    private DatabaseHolder() {
+        //don't initialize this object
     }
 
     /*
@@ -41,12 +40,10 @@ class DatabaseSingleton {
     };
      */
 
-    static DatabaseSingleton getInstance(Context context) {
-        if (instance == null) {
-            AppDataBase db = Room.databaseBuilder(context, AppDataBase.class, "app-database").allowMainThreadQueries().build();
-            instance = new DatabaseSingleton();
-            instance.dataBase = db;
+    static AppDataBase getDatabase(Context context) {
+        if (database == null) {
+            database = Room.databaseBuilder(context, AppDataBase.class, "app-database").allowMainThreadQueries().build();
         }
-        return instance;
+        return database;
     }
 }

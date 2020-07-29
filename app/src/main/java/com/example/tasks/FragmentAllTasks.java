@@ -39,7 +39,7 @@ public class FragmentAllTasks extends Fragment{
         appbar.setTitle(R.string.main_bot_nav_all);
 
         //get all non-recurring, incomplete tasks
-        List<Task> tasks = DatabaseSingleton.getInstance(getContext()).dataBase.getTaskDao().selectAll();
+        List<Task> tasks = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getTaskDao().selectAll();
         tasks.removeIf(new Predicate<Task>() {
             @Override
             public boolean test(Task task) {
@@ -48,7 +48,7 @@ public class FragmentAllTasks extends Fragment{
         });
 
         //get recurring tasks
-        List<RecurringTask> recurringTasks = DatabaseSingleton.getInstance((getContext())).dataBase.getRecurringTaskDao().selectAll();
+        List<RecurringTask> recurringTasks = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getRecurringTaskDao().selectAll();
 
         List<TaskDataProvider> TaskDatas = new ArrayList<>();
         TaskDatas.addAll(tasks);

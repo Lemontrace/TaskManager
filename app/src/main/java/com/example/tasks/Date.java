@@ -1,6 +1,7 @@
 package com.example.tasks;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,8 +40,6 @@ class Date {
         }
     }
 
-    static String STRING_DATE_NOT_SET = "Date Not Set";
-
     static boolean isEqual(@Nullable Date date1, @Nullable Date date2) {
         if (date1 == null && date2 == null) {
             return true;
@@ -59,14 +58,14 @@ class Date {
     @SuppressLint("DefaultLocale")
     static String getDateString(Date date) {
         if (date == null) {
-            return STRING_DATE_NOT_SET;
+            return Resources.getSystem().getString(R.string.date_not_set);
         } else {
             return String.format("%d-%02d-%02d", date.year, date.month + 1, date.day);
         }
     }
 
     static Date decodeDateString(String string) {
-        if (string.equals(STRING_DATE_NOT_SET)) {
+        if (string.equals(Resources.getSystem().getString(R.string.date_not_set))) {
             return null;
         } else {
             String[] tokens = string.split("-");

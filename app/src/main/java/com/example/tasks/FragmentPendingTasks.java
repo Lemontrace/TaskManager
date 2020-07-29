@@ -39,7 +39,7 @@ public class FragmentPendingTasks extends Fragment{
         appbar.setTitle(R.string.main_bot_nav_pending);
 
         //get dao
-        TaskDao dao = DatabaseSingleton.getInstance(getContext()).dataBase.getTaskDao();
+        TaskDao dao = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getTaskDao();
 
 
         Predicate<Task> isTaskCompleted=new Predicate<Task>() {

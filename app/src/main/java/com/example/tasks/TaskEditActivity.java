@@ -43,7 +43,7 @@ public class TaskEditActivity extends FragmentActivity {
             }
         });
         taskId = getIntent().getIntExtra(EXTRA_TASK_ID, 0);
-        task = DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().selectTaskById(taskId);
+        task = DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().selectTaskById(taskId);
         displayTask(task);
     }
 
@@ -53,7 +53,7 @@ public class TaskEditActivity extends FragmentActivity {
         EditText bodyView=findViewById(R.id.body);
         bodyView.setText(task.body);
         TextView dateView=findViewById(R.id.date);
-        dateView.setText(task.date.toString());
+        dateView.setText(Date.getDateString(task.date));
         updateDateSetButton();
     }
 
@@ -66,7 +66,7 @@ public class TaskEditActivity extends FragmentActivity {
             //date is set : unsetting
             task.date=null;
             TextView dateView=findViewById(R.id.date);
-            dateView.setText(task.date.toString());
+            dateView.setText(Date.getDateString(task.date));
         }
         updateDateSetButton();
     }
@@ -89,7 +89,7 @@ public class TaskEditActivity extends FragmentActivity {
         task.body = bodyView.getText().toString();//set body
         //"date" is set with listener, so we don't need to worry about that
 
-        DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().updateTask(task);
+        DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().updateTask(task);
 
         finish();
     }

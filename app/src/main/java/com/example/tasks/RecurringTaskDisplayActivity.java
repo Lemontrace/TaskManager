@@ -46,7 +46,7 @@ public class RecurringTaskDisplayActivity extends AppCompatActivity {
         });
         //get the task to display
         int recurringTaskId = getIntent().getIntExtra(EXTRA_TASK_ID, 0);
-        task = DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getRecurringTaskDao().selectRecurringTaskById(recurringTaskId);
+        task = DatabaseHolder.getDatabase(getApplicationContext()).getRecurringTaskDao().selectRecurringTaskById(recurringTaskId);
         //display it
         displayTask(task);
         //set appbar title
@@ -85,7 +85,7 @@ public class RecurringTaskDisplayActivity extends AppCompatActivity {
     public void onDeleteButtonClick(View view) {
         //delete Task when the button is clicked twice
         if (deleteClickedOnce) {
-            DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getRecurringTaskDao().deleteRecurringTask(task);
+            DatabaseHolder.getDatabase(getApplicationContext()).getRecurringTaskDao().deleteRecurringTask(task);
             finish();
         } else {
             view.setBackgroundColor(getColor(R.color.colorPrimaryDark));

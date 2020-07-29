@@ -46,7 +46,7 @@ public class TaskDisplayActivity extends AppCompatActivity {
     public void onDeleteButtonClick(View view){
         //delete Task when the button is clicked twice
         if (deleteClickedOnce) {
-            DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().deleteTask(task);
+            DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().deleteTask(task);
             finish();
         } else {
             view.setBackgroundColor(getColor(R.color.colorPrimaryDark));
@@ -59,7 +59,7 @@ public class TaskDisplayActivity extends AppCompatActivity {
     public void onCompletedButtonClick(View view) {
         //mark task as completed
         task.completed = !task.completed;
-        DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().updateTask(task);
+        DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().updateTask(task);
         finish();
     }
 
@@ -79,7 +79,7 @@ public class TaskDisplayActivity extends AppCompatActivity {
         });
         //get the task to display
         int taskId = getIntent().getIntExtra(EXTRA_TASK_ID, 0);
-        task = DatabaseSingleton.getInstance(getApplicationContext()).dataBase.getTaskDao().selectTaskById(taskId);
+        task = DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().selectTaskById(taskId);
         //display it
         displayTask(task);
         //set appbar title

@@ -1,5 +1,7 @@
 package com.example.tasks;
 
+import android.content.res.Resources;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -19,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-
-import static com.example.tasks.Date.STRING_DATE_NOT_SET;
 
 
 @Entity
@@ -98,7 +98,7 @@ class Task implements TaskDataProvider {
         //decoding attributes
         task.title=save.getOrDefault("title",""); //title
         task.body=save.getOrDefault("body",""); //body
-        String dateString=save.getOrDefault("date", STRING_DATE_NOT_SET);
+        String dateString = save.getOrDefault("date", Resources.getSystem().getString(R.string.date_not_set));
         task.date = Date.decodeDateString(Objects.requireNonNull(dateString)); //date
         String completedString=save.getOrDefault("completed:%s","false");
         task.completed=Boolean.parseBoolean(completedString);
