@@ -45,7 +45,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:title="@string/title_add_task"
-        app:titleTextAppearance="@style/AppBarTitleText"
+        app:titleTextAppearance="@style/BaseAppBarTheme"
         app:titleTextColor="@color/colorMenu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

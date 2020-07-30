@@ -19,7 +19,7 @@ class TaskCardViewHolderExactDate extends TaskCardViewHolderWithDateView {
         if (taskData.getDate() == null) {
             dateView.setText(R.string.date_not_set);
         } else {
-            dateView.setText(Date.getDateString(taskData.getDate()));
+            dateView.setText(Date.getDateStringInContext(card.getContext(), taskData.getDate()));
         }
     }
 

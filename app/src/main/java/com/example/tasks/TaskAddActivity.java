@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -33,7 +34,7 @@ public class TaskAddActivity extends FragmentActivity {
             //date is set : unsetting
             date = null;
             TextView dateView = findViewById(R.id.date);
-            dateView.setText(Date.getDateString(date));
+            dateView.setText(Date.getDateStringInContext(this, date));
         }
 
         updateDateSetButton();
@@ -85,44 +86,25 @@ public class TaskAddActivity extends FragmentActivity {
         }
     }
 
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            Date today = Date.getToday();
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(requireContext(), this, today.year, today.month, today.day);
-        }
-
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            Date date = new Date(year, month, day);
-            ((TaskAddActivity) requireActivity()).date = date;
-            //update dateView
-            TextView dateView = requireActivity().findViewById(R.id.date);
-            dateView.setText(Date.getDateString(date));
-            ((TaskAddActivity) requireActivity()).updateDateSetButton();
-        }
-    }
-
     public void onConfirmButtonClick(View view) {
 
         CheckBox checkBox = findViewById(R.id.checkBoxRecurringTask);
         boolean isRecurring = checkBox.isChecked();
         if (isRecurring) {
+            if (date == null) {
+                Toast.makeText(this, R.string.edit_starting_date_required, Toast.LENGTH_SHORT).show();
+                return;
+            }
             RecurringTask recurringTask = new RecurringTask();
             //set task attributes
             EditText titleView = findViewById(R.id.title);
             recurringTask.title = titleView.getText().toString();//set title
-            EditText bodyView= findViewById(R.id.body);
-            recurringTask.body=bodyView.getText().toString();//set body
-            recurringTask.date=date; //set date
+            EditText bodyView = findViewById(R.id.body);
+            recurringTask.body = bodyView.getText().toString();//set body
+            recurringTask.date = date; //set date
 
 
-            ViewGroup days=findViewById(R.id.days);
+            ViewGroup days = findViewById(R.id.days);
             List<Boolean> onDay = new ArrayList<>();
 
             //check checked state and save it to onDay
@@ -139,8 +121,8 @@ public class TaskAddActivity extends FragmentActivity {
             EditText titleView= findViewById(R.id.title);
             task.title=titleView.getText().toString();//set title
             EditText bodyView= findViewById(R.id.body);
-            task.body=bodyView.getText().toString();//set body
-            task.date=date; //set date
+            task.body = bodyView.getText().toString();//set body
+            task.date = date; //set date
             // add the task object
             DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().insertTask(task);
         }
@@ -149,8 +131,31 @@ public class TaskAddActivity extends FragmentActivity {
         finish();
     }
 
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            Date today = Date.getToday();
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(requireContext(), this, today.year, today.month, today.day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            TaskAddActivity activity = (TaskAddActivity) requireActivity();
+            activity.date = new Date(year, month, day);
+            //update dateView
+            TextView dateView = requireActivity().findViewById(R.id.date);
+            dateView.setText(Date.getDateStringInContext(requireContext(), activity.date));
+            activity.updateDateSetButton();
+        }
+    }
+
     static void launchActivity(Context context) {
-        Intent intent=new Intent(context, TaskAddActivity.class);
+        Intent intent = new Intent(context, TaskAddActivity.class);
         context.startActivity(intent);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.tasks;
 
 import android.annotation.SuppressLint;
-import android.content.res.Resources;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,26 +55,41 @@ class Date {
         return new Date(calendar.get(java.util.Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
     }
 
+    static final String STRING_NULL_DATE = "Null Date";
+
     @SuppressLint("DefaultLocale")
     static String getDateString(Date date) {
         if (date == null) {
-            return Resources.getSystem().getString(R.string.date_not_set);
+            return STRING_NULL_DATE;
         } else {
             return String.format("%d-%02d-%02d", date.year, date.month + 1, date.day);
         }
     }
 
     static Date decodeDateString(String string) {
-        if (string.equals(Resources.getSystem().getString(R.string.date_not_set))) {
-            return null;
-        } else {
-            String[] tokens = string.split("-");
-            int year = Integer.parseInt(tokens[0]);
-            int month = Integer.parseInt(tokens[1]) - 1;
-            int day = Integer.parseInt(tokens[2]);
-            return new Date(year, month, day);
+        try {
+            if (string.equals(STRING_NULL_DATE)) {
+                return null;
+            } else {
+                String[] tokens = string.split("-");
+                int year = Integer.parseInt(tokens[0]);
+                int month = Integer.parseInt(tokens[1]) - 1;
+                int day = Integer.parseInt(tokens[2]);
+                return new Date(year, month, day);
+            }
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            throw (new IllegalArgumentException(e));
         }
 
+    }
+
+    @SuppressLint("DefaultLocale")
+    static String getDateStringInContext(Context context, Date date) {
+        if (date == null) {
+            return context.getResources().getString(R.string.date_not_set);
+        } else {
+            return String.format("%d-%02d-%02d", date.year, date.month + 1, date.day);
+        }
     }
 
     @Override

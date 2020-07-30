@@ -13,12 +13,11 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:theme="@style/BaseAppBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        app:titleTextColor="@color/colorMenu" />
+        app:navigationIcon="?attr/homeAsUpIndicator" />
 
     <ScrollView
         android:layout_width="0dp"

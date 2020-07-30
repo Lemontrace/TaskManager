@@ -28,7 +28,7 @@ class TaskCardViewHolderAutoDate extends TaskCardViewHolderWithDateView {
             dateView.setText(R.string.today);
             if (dateColorToday != null) dateView.setTextColor(dateColorToday);
         } else {
-            dateView.setText(Date.getDateString(taskData.getDate()));
+            dateView.setText(Date.getDateStringInContext(card.getContext(), taskData.getDate()));
             if (taskData.getDate().compareTo(Date.getToday()) < 0) {
                 //overdue
                 if (dateColorOverdue != null) dateView.setTextColor(dateColorOverdue);

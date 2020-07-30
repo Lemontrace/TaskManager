@@ -30,15 +30,11 @@ public class TaskDisplayActivity extends AppCompatActivity {
         bodyView.setText(task.body);
 
         TextView dateView = findViewById(R.id.date);
-        if (task.date == null) {
-            dateView.setText(R.string.date_not_set);
-        } else {
-            dateView.setText(task.date.toString());
-        }
+        dateView.setText(Date.getDateStringInContext(this, task.date));
     }
 
     public void onEditButtonClick(MenuItem item){
-        TaskEditActivity.launchActivity(this,task.id);
+        TaskEditActivity.launchActivity(this, TaskDataProvider.TASK_TYPE_TASK, task.id);
         finish();
     }
 

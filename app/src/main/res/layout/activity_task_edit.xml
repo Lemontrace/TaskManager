@@ -38,13 +38,12 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:theme="@style/BaseAppBarTheme"
         app:layout_constraintBottom_toTopOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/homeAsUpIndicator"
-        app:title="@string/title_edit_task"
-        app:titleTextAppearance="@style/AppBarTitleText" />
+        app:title="@string/title_edit_task" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

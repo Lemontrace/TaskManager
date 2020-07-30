@@ -49,7 +49,6 @@ public class FragmentPendingTasks extends Fragment{
             }
         };
 
-
         //get overdue tasks, tasks due today, tasks with no date set (incomplete ones)
         Date today=Date.getToday();
 

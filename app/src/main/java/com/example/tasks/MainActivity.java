@@ -108,7 +108,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onDeleteCompletedTasksMenuClick(MenuItem item) {
-        DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().deleteCompletedTask();
+        DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().deleteCompletedTasks();
         Toast.makeText(this, R.string.toast_tasks_deleted, Toast.LENGTH_SHORT).show();
         if (botNav.getSelectedItemId()==R.id.bot_nav_completed) {
             ((FragmentCompletedTasks)currentFragment).updateTaskList();

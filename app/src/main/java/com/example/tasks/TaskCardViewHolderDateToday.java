@@ -13,8 +13,8 @@ class TaskCardViewHolderDateToday extends TaskCardViewHolderWithDateView {
         super(view);
     }
 
-    void bindTo(final Task task) {
-        super.bindTo(task);
+    void bindTo(final TaskDataProvider taskData) {
+        super.bindTo(taskData);
         dateView.setText(R.string.today);
     }
 
@@ -22,9 +22,10 @@ class TaskCardViewHolderDateToday extends TaskCardViewHolderWithDateView {
 
         Integer titleColor;
         Integer dateColor;
-        TaskCardViewHolderDateTodayFactory(Integer titleColor,Integer dateColor) {
-            this.titleColor=titleColor;
-            this.dateColor=dateColor;
+
+        TaskCardViewHolderDateTodayFactory(Integer titleColor, Integer dateColor) {
+            this.titleColor = titleColor;
+            this.dateColor = dateColor;
         }
 
         @Override

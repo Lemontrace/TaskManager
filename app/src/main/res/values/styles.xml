@@ -6,11 +6,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/colorMenu</item>
+        <item name="titleTextColor">@color/colorMenu</item>
     </style>
 
-    <style name="AppBarTitleText">
+    <style name="Widget.AppCompat.Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="tint">?attr/colorButtonNormal</item>
+    </style>
+
+    <style name="BaseAppBarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:textColor">?attr/titleTextColor</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="toolbarNavigationButtonStyle">
+            @style/Widget.AppCompat.Toolbar.Button.Navigation.Tinted
+        </item>
     </style>
 
 </resources>

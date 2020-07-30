@@ -236,7 +236,7 @@ interface TaskDao {
     Task selectTaskById(int id);
 
     @Query("DELETE From Task WHERE completed = 1")
-    void deleteCompletedTask();
+    void deleteCompletedTasks();
 
 }
 

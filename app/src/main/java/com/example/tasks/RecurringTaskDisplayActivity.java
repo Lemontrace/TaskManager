@@ -48,12 +48,12 @@ public class RecurringTaskDisplayActivity extends AppCompatActivity {
         int recurringTaskId = getIntent().getIntExtra(EXTRA_TASK_ID, 0);
         task = DatabaseHolder.getDatabase(getApplicationContext()).getRecurringTaskDao().selectRecurringTaskById(recurringTaskId);
         //display it
-        displayTask(task);
+        displayRecurringTask(task);
         //set appbar title
         appbar.setTitle(task.title);
     }
 
-    private void displayTask(@NonNull RecurringTask task) {
+    private void displayRecurringTask(@NonNull RecurringTask task) {
         //title
         TextView titleView = findViewById(R.id.title);
         titleView.setText(task.title);
@@ -72,6 +72,7 @@ public class RecurringTaskDisplayActivity extends AppCompatActivity {
 
         //recurring days
         ViewGroup days = findViewById(R.id.days);
+        days.setVisibility(View.VISIBLE);
         List<Boolean> onDay = task.onDay;
         for (int i = 0; i < 7; i++) {
             ((CheckBox) days.getChildAt(i)).setChecked(onDay.get(i));
@@ -79,7 +80,8 @@ public class RecurringTaskDisplayActivity extends AppCompatActivity {
     }
 
     public void onEditButtonClick(MenuItem item) {
-        //todo
+        TaskEditActivity.launchActivity(this, TaskDataProvider.TASK_TYPE_RECURRING_TASK, task.id);
+        finish();
     }
 
     public void onDeleteButtonClick(View view) {
