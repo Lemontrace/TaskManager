@@ -47,7 +47,7 @@ public class TaskAddActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_add);
         //set up appbar
-        Toolbar appbar = findViewById(R.id.appbar_memo_add);
+        Toolbar appbar = findViewById(R.id.appbar);
         //'up' button
         appbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

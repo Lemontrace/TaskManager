@@ -35,7 +35,7 @@ public class RecurringTaskDisplayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recurring_task_display);
         //set up appbar
-        Toolbar appbar = findViewById(R.id.appbar_task_display);
+        Toolbar appbar = findViewById(R.id.appbar);
         appbar.inflateMenu(R.menu.menu_task_display);
         //'up' button
         appbar.setNavigationOnClickListener(new View.OnClickListener() {

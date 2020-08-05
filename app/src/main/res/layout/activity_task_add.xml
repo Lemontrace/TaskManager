@@ -30,10 +30,10 @@
         app:layout_constraintBottom_toTopOf="@+id/confirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar_memo_add" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/appbar_memo_add"
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"

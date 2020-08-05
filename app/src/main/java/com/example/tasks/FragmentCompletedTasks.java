@@ -34,13 +34,13 @@ public class FragmentCompletedTasks extends Fragment {
         super.onStart();
 
         //set appbar title
-        Toolbar appbar = requireActivity().findViewById(R.id.appbar_main);
+        Toolbar appbar = requireActivity().findViewById(R.id.appbar);
         appbar.setTitle(R.string.main_bot_nav_completed);
 
         //set up recyclerView
         RecyclerView taskViewCompleted = requireActivity().findViewById(R.id.taskview);
         taskViewCompleted.setLayoutManager(new LinearLayoutManager(getContext()));
-        Integer textColor=getResources().getColor(R.color.colorPastMemo,null);
+        Integer textColor = getResources().getColor(R.color.colorCompletedTask, null);
         //get viewHolder factory
         TaskCardViewHolderFactory factory =
                 new TaskCardViewHolderExactDate.TaskCardViewHolderExactDateFactory

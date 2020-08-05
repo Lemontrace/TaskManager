@@ -12,6 +12,7 @@ class TaskCardViewHolderAutoDate extends TaskCardViewHolderWithDateView {
 
     Integer dateColorOverdue;
     Integer dateColorToday;
+    Integer dateColorRecurring;
 
     TaskCardViewHolderAutoDate(View view) {
         super(view);
@@ -20,7 +21,10 @@ class TaskCardViewHolderAutoDate extends TaskCardViewHolderWithDateView {
     @Override
     void bindTo(final TaskDataProvider taskData) {
         super.bindTo(taskData);
-        if (taskData.getDate() == null) {
+        if (taskData.getTaskType().equals(TaskDataProvider.TASK_TYPE_RECURRING_TASK)) {
+            dateView.setText(R.string.recurring_task);
+            if (dateColorRecurring != null) dateView.setTextColor(dateColorRecurring);
+        } else if (taskData.getDate() == null) {
             //date not set
             dateView.setText(R.string.date_not_set);
         } else if (Date.isEqual(taskData.getDate(), Date.getToday())) {
@@ -38,34 +42,37 @@ class TaskCardViewHolderAutoDate extends TaskCardViewHolderWithDateView {
 
     static class TaskCardViewHolderAutoDateFactory implements TaskCardViewHolderFactory {
 
-        Integer titleColor, dateColor, dateColorOverdue, dateColorToday;
-        TaskCardViewHolderAutoDateFactory(Integer titleColor, Integer dateColor, Integer dateColorOverdue, Integer dateColorToday) {
-            this.titleColor=titleColor;
-            this.dateColor=dateColor;
-            this.dateColorOverdue=dateColorOverdue;
-            this.dateColorToday=dateColorToday;
+        Integer titleColor, dateColor, dateColorOverdue, dateColorToday, dateColorRecurring;
+
+        TaskCardViewHolderAutoDateFactory(Integer titleColor, Integer dateColor, Integer dateColorOverdue, Integer dateColorToday, Integer dateColorRecurring) {
+            this.titleColor = titleColor;
+            this.dateColor = dateColor;
+            this.dateColorOverdue = dateColorOverdue;
+            this.dateColorToday = dateColorToday;
+            this.dateColorRecurring = dateColorRecurring;
         }
 
         @Override
         public TaskCardViewHolder create(ViewGroup parent) {
             //params for making cardview fill the space
-            RecyclerView.LayoutParams params=new RecyclerView.LayoutParams(
-                    RecyclerView.LayoutParams.MATCH_PARENT,RecyclerView.LayoutParams.WRAP_CONTENT
+            RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(
+                    RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT
             );
             //create cardview and apply params
-            CardView card=new CardView(parent.getContext());
+            CardView card = new CardView(parent.getContext());
             card.setLayoutParams(params);
 
             //inflate card body
-            LayoutInflater.from(parent.getContext()).inflate(R.layout.task_view_card,card);
+            LayoutInflater.from(parent.getContext()).inflate(R.layout.task_view_card, card);
 
             //return viewholder instance
 
             TaskCardViewHolderAutoDate taskCardViewHolderAutoDate = new TaskCardViewHolderAutoDate(card);
-            taskCardViewHolderAutoDate.titleColor=titleColor;
-            taskCardViewHolderAutoDate.dateColor=dateColor;
-            taskCardViewHolderAutoDate.dateColorOverdue=dateColorOverdue;
-            taskCardViewHolderAutoDate.dateColorToday= dateColorToday;
+            taskCardViewHolderAutoDate.titleColor = titleColor;
+            taskCardViewHolderAutoDate.dateColor = dateColor;
+            taskCardViewHolderAutoDate.dateColorOverdue = dateColorOverdue;
+            taskCardViewHolderAutoDate.dateColorToday = dateColorToday;
+            taskCardViewHolderAutoDate.dateColorRecurring = dateColorRecurring;
 
             return taskCardViewHolderAutoDate;
         }

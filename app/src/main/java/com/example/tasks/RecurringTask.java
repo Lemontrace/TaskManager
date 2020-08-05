@@ -1,5 +1,9 @@
 package com.example.tasks;
 
+import android.icu.util.Calendar;
+import android.icu.util.GregorianCalendar;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
@@ -13,6 +17,7 @@ import androidx.room.Update;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Entity
 class RecurringTask implements TaskDataProvider {
@@ -31,6 +36,8 @@ class RecurringTask implements TaskDataProvider {
     public List<Boolean> onDay;
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public List<Date> completedDates;
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+    public List<Date> skippedDates;
 
 
     RecurringTask() {
@@ -44,6 +51,7 @@ class RecurringTask implements TaskDataProvider {
             onDay.add(true);
         }
         completedDates = new ArrayList<>();
+        skippedDates = new ArrayList<>();
     }
 
     @Override
@@ -58,13 +66,88 @@ class RecurringTask implements TaskDataProvider {
 
     @Override
     public Date getDate() {
-        //todo : make this function return next occurrence of this task
         return date;
     }
 
     @Override
     public Integer getTaskType() {
         return TASK_TYPE_RECURRING_TASK;
+    }
+
+    @NonNull
+    List<RecurringTaskInstance> getActiveInstances() {
+        // TODO: 05/08/20 Maybe use database to store instances
+
+        //this recurring task has no day selected; return empty list
+        if (!onDay.contains(true)) return new ArrayList<>();
+
+
+        //get today's date using GregorianCalendar class
+        Calendar calendar = new GregorianCalendar(date.year, date.month, date.day);
+        Calendar today = GregorianCalendar.getInstance();
+
+
+        int dayDifference = calendar.fieldDifference(today.getTime(), Calendar.DAY_OF_MONTH);    //calendar.fieldDifference method call has side effect
+        calendar = new GregorianCalendar(date.year, date.month, date.day);    //this resets the side effect
+
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        day = calendarDayToLocalDay(day);
+
+        //get all instances before today
+        List<RecurringTaskInstance> instances = new ArrayList<>();
+        for (int i = 0; i < dayDifference; i++) {
+            if (onDay.get(day)) {
+                if (!completedDates.contains(new Date(calendar)))
+                    instances.add(new RecurringTaskInstance(this, new Date(calendar)));
+            }
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            day = (day + 1) % 7;
+        }
+
+        //get 1 instance today or after today
+        while (true) {
+            if (onDay.get(day)) {
+                if (!completedDates.contains(new Date(calendar))) {
+                    instances.add(new RecurringTaskInstance(this, new Date(calendar)));
+                    break;
+                }
+            } else {
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                day = (day + 1) % 7;
+            }
+        }
+        return instances;
+    }
+
+    //translate GregorianCalendar 'day' value to 'day' value used in this class
+    private int calendarDayToLocalDay(int day) {
+        switch (day) {
+            case Calendar.MONDAY:
+                day = 0;
+                break;
+            case Calendar.TUESDAY:
+                day = 1;
+                break;
+            case Calendar.WEDNESDAY:
+                day = 2;
+                break;
+            case Calendar.THURSDAY:
+                day = 3;
+                break;
+            case Calendar.FRIDAY:
+                day = 4;
+                break;
+            case Calendar.SATURDAY:
+                day = 5;
+                break;
+            case Calendar.SUNDAY:
+                day = 6;
+                break;
+            default:
+                throw (new RuntimeException("GregorianCalendar returned illegal day!(or I fucked up)"));
+        }
+
+        return day;
     }
 
     public static class onDayConverter {

@@ -35,7 +35,7 @@ public class FragmentAllTasks extends Fragment{
         super.onStart();
 
         //set appbar title
-        Toolbar appbar = requireActivity().findViewById(R.id.appbar_main);
+        Toolbar appbar = requireActivity().findViewById(R.id.appbar);
         appbar.setTitle(R.string.main_bot_nav_all);
 
         //get all non-recurring, incomplete tasks
@@ -61,7 +61,9 @@ public class FragmentAllTasks extends Fragment{
         //get viewHolder factory
         TaskCardViewHolderFactory factory =
                 new TaskCardViewHolderAutoDate.TaskCardViewHolderAutoDateFactory(null, null,
-                        getResources().getColor(R.color.colorPrimaryDark, null), getResources().getColor(R.color.colorAccent, null));
+                        getResources().getColor(R.color.colorPrimaryDark, null),
+                        getResources().getColor(R.color.colorAccent, null),
+                        getResources().getColor(R.color.colorDateRecurring, null));
         //get adapter with the factory
         TaskListAdapter adapter = TaskListAdapter.getInstance(factory);
         //set adapter

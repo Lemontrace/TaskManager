@@ -30,9 +30,11 @@ abstract class TaskCardViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
 
                 if (taskData.getTaskType().equals(TaskDataProvider.TASK_TYPE_TASK)) {
-                    TaskDisplayActivity.launchActivity(TaskCardViewHolder.this.card.getContext(), taskData.getId());
+                    TaskDisplayActivity.launchActivity(card.getContext(), taskData.getId());
                 } else if (taskData.getTaskType().equals(TaskDataProvider.TASK_TYPE_RECURRING_TASK)) {
-                    RecurringTaskDisplayActivity.launchActivity(TaskCardViewHolder.this.card.getContext(), taskData.getId());
+                    RecurringTaskDisplayActivity.launchActivity(card.getContext(), taskData.getId());
+                } else if (taskData.getTaskType().equals(TaskDataProvider.TASK_TYPE_RECURRING_TASK_INSTANCE)) {
+                    RecurringTaskInstanceDisplayActivity.launchActivity(card.getContext(), taskData.getId());
                 } else {
                     throw new IllegalStateException("unidentified task type");
                 }

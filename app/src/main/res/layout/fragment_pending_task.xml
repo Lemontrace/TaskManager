@@ -23,13 +23,6 @@
             android:orientation="vertical">
 
             <include
-                android:id="@+id/include_no_pending_task"
-                layout="@layout/no_pending_task"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
-            <include
                 android:id="@+id/include_overdue"
                 layout="@layout/pending_overdue"
                 android:layout_width="match_parent"
@@ -38,6 +31,12 @@
             <include
                 android:id="@+id/include_today"
                 layout="@layout/pending_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/include_rest"
+                layout="@layout/pending_rest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

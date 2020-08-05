@@ -43,7 +43,7 @@ public class TaskEditActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_edit);
         //set up appbar
-        Toolbar appbar = findViewById(R.id.appbar_memo_edit);
+        Toolbar appbar = findViewById(R.id.appbar);
         //'up' button
         appbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

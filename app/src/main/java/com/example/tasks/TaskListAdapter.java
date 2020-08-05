@@ -17,7 +17,7 @@ class TaskListAdapter extends ListAdapter<TaskDataProvider, TaskCardViewHolder> 
         TaskListAdapter adapter = new TaskListAdapter(new DiffUtil.ItemCallback<TaskDataProvider>() {
             @Override
             public boolean areItemsTheSame(@NonNull TaskDataProvider oldItem, @NonNull TaskDataProvider newItem) {
-                return oldItem.getId().equals(newItem.getId());
+                return oldItem.getId().equals(newItem.getId()) && oldItem.getTaskType().equals(newItem.getTaskType());
             }
 
             @Override

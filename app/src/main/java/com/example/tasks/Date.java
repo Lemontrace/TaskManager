@@ -2,11 +2,10 @@ package com.example.tasks;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.icu.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import java.util.Calendar;
 
 class Date {
     int year;
@@ -16,28 +15,27 @@ class Date {
 
 
     Date(int year, int month, int day) {
-        this.year=year;
-        this.month=month;
-        this.day=day;
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+
+    public Date(Calendar calendar) {
+        this.year = calendar.get(Calendar.YEAR);
+        this.month = calendar.get(Calendar.MONTH);
+        this.day = calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    static Date getToday() {
+        Calendar calendar = Calendar.getInstance();
+        return new Date(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
     }
 
     Date set(int year, int month, int day) {
-        this.year=year;
-        this.month=month;
-        this.day=day;
+        this.year = year;
+        this.month = month;
+        this.day = day;
         return this;
-    }
-
-    int compareTo(Date other){
-        if(this.year!=other.year) {
-            return Integer.compare(this.year, other.year);
-        } else if (this.month != other.month) {
-            return Integer.compare(this.month, other.month);
-        } else if (this.day != other.day) {
-            return Integer.compare(this.day, other.day);
-        } else {
-            return 0;
-        }
     }
 
     static boolean isEqual(@Nullable Date date1, @Nullable Date date2) {
@@ -50,9 +48,16 @@ class Date {
         }
     }
 
-    static Date getToday() {
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
-        return new Date(calendar.get(java.util.Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+    int compareTo(Date other) {
+        if (this.year != other.year) {
+            return Integer.compare(this.year, other.year);
+        } else if (this.month != other.month) {
+            return Integer.compare(this.month, other.month);
+        } else if (this.day != other.day) {
+            return Integer.compare(this.day, other.day);
+        } else {
+            return 0;
+        }
     }
 
     static final String STRING_NULL_DATE = "Null Date";
@@ -98,4 +103,11 @@ class Date {
         return Date.getDateString(this);
     }
 
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof Date)
+            return isEqual(this, (Date) obj);
+        else
+            return false;
+    }
 }

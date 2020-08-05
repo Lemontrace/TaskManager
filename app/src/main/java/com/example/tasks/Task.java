@@ -48,51 +48,6 @@ class Task implements TaskDataProvider {
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
     public boolean completed;
 
-
-    public static class DateComparator implements java.util.Comparator<Task> {
-
-        int factor;
-        DateComparator(boolean ascending){
-            if (ascending){
-                factor=+1;
-            } else{
-                factor=-1;
-            }
-        }
-
-        // null date(date not set) gets the smallest value, meaning it will always appear first
-        @Override
-        public int compare(Task m1, Task m2) {
-            if (m1.date==null&&m2.date==null){
-                return 0;
-            } else if (m1.date==null){
-                return -1;
-            } else if (m2.date==null) {
-                return +1;
-            } else {
-                return m1.date.compareTo(m2.date)*factor;
-            }
-        }
-
-    }
-
-    public static class TitleComparator implements java.util.Comparator<Task>{
-
-        int factor;
-        TitleComparator(boolean ascending){
-            if (ascending){
-                factor=+1;
-            } else{
-                factor=-1;
-            }
-        }
-
-        @Override
-        public int compare(Task m1, Task m2) {
-            return Integer.signum(m1.title.compareToIgnoreCase(m2.title))*factor;
-        }
-    }
-
     static Task loadFromAttributes(HashMap<String,String> save) {
         Task task=new Task();
         //decoding attributes

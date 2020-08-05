@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 
@@ -35,35 +37,57 @@ public class FragmentPendingTasks extends Fragment{
         super.onStart();
 
         //set appbar title
-        Toolbar appbar = requireActivity().findViewById(R.id.appbar_main);
+        Toolbar appbar = requireActivity().findViewById(R.id.appbar);
         appbar.setTitle(R.string.main_bot_nav_pending);
+
 
         //get dao
         TaskDao dao = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getTaskDao();
+        RecurringTaskDao recurringTaskDao = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getRecurringTaskDao();
 
-
-        Predicate<Task> isTaskCompleted=new Predicate<Task>() {
+        //get overdue tasks, tasks due today, tasks with no date set (incomplete ones)
+        Predicate<Task> isTaskCompleted = new Predicate<Task>() {
             @Override
             public boolean test(Task task) {
                 return task.completed;
             }
         };
+        Date today = Date.getToday();
 
-        //get overdue tasks, tasks due today, tasks with no date set (incomplete ones)
-        Date today=Date.getToday();
+        List<Task> _overDueTasks = dao.selectTaskBeforeDate(today);
+        _overDueTasks.removeIf(isTaskCompleted);
+        _overDueTasks.sort(new Task.DateComparator(true));
+        List<TaskDataProvider> overDueTasks = new ArrayList<TaskDataProvider>(_overDueTasks);
 
-        List<Task> overDueTasks = dao.selectTaskBeforeDate(today);
-        overDueTasks.removeIf(isTaskCompleted);
-        overDueTasks.sort(new Task.DateComparator(true));
+        List<Task> _todayTasks = dao.selectTaskAtDate(today);
+        _todayTasks.removeIf(isTaskCompleted);
+        List<TaskDataProvider> todayTasks = new ArrayList<TaskDataProvider>(_todayTasks);
 
-        List<Task> todayTasks = dao.selectTaskAtDate(today);
-        todayTasks.removeIf(isTaskCompleted);
+        List<Task> _rest = dao.selectTaskAfterDate(today);
+        _rest.removeIf(isTaskCompleted);
+        List<TaskDataProvider> rest = new ArrayList<TaskDataProvider>(_rest);
 
-        List<Task> noDateTasks = dao.selectTaskWithoutDate();
-        noDateTasks.removeIf(isTaskCompleted);
+        List<Task> _noDateTasks = dao.selectTaskWithoutDate();
+        _noDateTasks.removeIf(isTaskCompleted);
+        List<TaskDataProvider> noDateTasks = new ArrayList<TaskDataProvider>(_noDateTasks);
+
+
+        List<RecurringTask> recurringTaskList = recurringTaskDao.selectAll();
+
+        final List<RecurringTaskInstance> recurringTaskInstanceList = new LinkedList<>();
+        recurringTaskList.forEach(new Consumer<RecurringTask>() {
+            @Override
+            public void accept(RecurringTask recurringTask) {
+                recurringTaskInstanceList.addAll(recurringTask.getActiveInstances());
+            }
+        });
+
+        noDateTasks.addAll(recurringTaskInstanceList);
 
 
         //set up recyclerviews and their adapters
+
+
         View noDateView = requireActivity().findViewById(R.id.include_no_date);
         if (noDateTasks.isEmpty()) {
             //hide overdue task view
@@ -76,15 +100,15 @@ public class FragmentPendingTasks extends Fragment{
             taskViewNoDate.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //default colors
-            TaskCardViewHolderFactory factory=
+            TaskCardViewHolderFactory factory =
                     new TaskCardViewHolderExactDate.TaskCardViewHolderExactDateFactory
-                            (null,null);
+                            (null, getResources().getColor(R.color.colorTaskNoDate, null));
             //get adapter that uses the factory
-            TaskListAdapter noDateAdapter= TaskListAdapter.getInstance(factory);
+            TaskListAdapter adapterNoDate = TaskListAdapter.getInstance(factory);
             //set adapter
-            taskViewNoDate.setAdapter(noDateAdapter);
+            taskViewNoDate.setAdapter(adapterNoDate);
             //update tasks
-            noDateAdapter.submitList(new ArrayList<TaskDataProvider>(noDateTasks));
+            adapterNoDate.submitList(noDateTasks);
         }
 
         View overDueView = requireActivity().findViewById(R.id.include_overdue);
@@ -99,16 +123,16 @@ public class FragmentPendingTasks extends Fragment{
             taskViewOverDue.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //dark color for date
-            TaskCardViewHolderFactory factory=
+            TaskCardViewHolderFactory factory =
                     new TaskCardViewHolderExactDate.TaskCardViewHolderExactDateFactory
-                            (null,getResources().getColor(R.color.colorPrimaryDark,null));
+                            (null, getResources().getColor(R.color.colorPrimaryDark, null));
             //get adapter that uses the factory
-            TaskListAdapter overDueAdapter= TaskListAdapter.getInstance(factory);
+            TaskListAdapter adapterOverDue = TaskListAdapter.getInstance(factory);
             //set adapter
-            taskViewOverDue.setAdapter(overDueAdapter);
+            taskViewOverDue.setAdapter(adapterOverDue);
             //update tasks
-            overDueTasks.sort(new Task.DateComparator(true));
-            overDueAdapter.submitList(new ArrayList<TaskDataProvider>(overDueTasks));
+            overDueTasks.sort(new TaskDataProvider.DateComparator(true));
+            adapterOverDue.submitList(overDueTasks);
         }
 
         View todayView = requireActivity().findViewById(R.id.include_today);
@@ -123,24 +147,40 @@ public class FragmentPendingTasks extends Fragment{
             taskViewToday.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //accent color for date
-            TaskCardViewHolderFactory factory=
+
+            TaskCardViewHolderFactory factory =
                     new TaskCardViewHolderDateToday.TaskCardViewHolderDateTodayFactory
-                            (null,getResources().getColor(R.color.colorAccent,null));
+                            (null, getResources().getColor(R.color.colorAccent, null));
             //get adapter that uses the factory
-            TaskListAdapter todayAdapter= TaskListAdapter.getInstance(factory);
+            TaskListAdapter adapterToday = TaskListAdapter.getInstance(factory);
             //set adapter
-            taskViewToday.setAdapter(todayAdapter);
+            taskViewToday.setAdapter(adapterToday);
             //update tasks
-            todayAdapter.submitList(new ArrayList<TaskDataProvider>(todayTasks));
+            adapterToday.submitList(todayTasks);
         }
 
-
-        //display message if there is no pending task
-        View noPendingTaskInclude = requireActivity().findViewById(R.id.include_no_pending_task);
-        if (overDueTasks.isEmpty()&&todayTasks.isEmpty()&&noDateTasks.isEmpty()) {
-            noPendingTaskInclude.setVisibility(View.VISIBLE);
+        View restView = requireActivity().findViewById(R.id.include_rest);
+        if (rest.isEmpty()) {
+            //hide overdue task view
+            restView.setVisibility(View.GONE);
         } else {
-            noPendingTaskInclude.setVisibility(View.GONE);
+            //show overdue task view
+            restView.setVisibility(View.VISIBLE);
+            //set up recyclerView
+            RecyclerView taskViewrest = requireActivity().findViewById(R.id.taskview_rest);
+            taskViewrest.setLayoutManager(new LinearLayoutManager(getContext()));
+            //get viewHolder factory
+            //dark color for date
+            TaskCardViewHolderFactory factory =
+                    new TaskCardViewHolderExactDate.TaskCardViewHolderExactDateFactory
+                            (null, null);
+            //get adapter that uses the factory
+            TaskListAdapter adapterRest = TaskListAdapter.getInstance(factory);
+            //set adapter
+            taskViewrest.setAdapter(adapterRest);
+            //update tasks
+            rest.sort(new TaskDataProvider.DateComparator(true));
+            adapterRest.submitList(rest);
         }
 
     }

@@ -5,6 +5,8 @@
     <color name="colorAccent">#b5f4f7</color>
     <color name="colorMenu">#ffffff</color>
     <color name="colorMemo">#6b6b6b</color>
-    <color name="colorPastMemo">#bfbfbf</color>
-    <color name="colorMemoNoDate">#9e839e</color>
+    <color name="colorCompletedTask">#bfbfbf</color>
+    <color name="colorTaskNoDate">#9e839e</color>
+    <color name="colorDateRecurring">#20ABBC</color>
+    <color name="colorTaskRest">#bfbfbf</color>
 </resources>

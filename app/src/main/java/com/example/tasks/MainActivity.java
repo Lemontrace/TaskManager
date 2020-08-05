@@ -33,29 +33,65 @@ import java.util.HashMap;
 
 public class MainActivity extends FragmentActivity {
 
-    static final String PREF_SORTING="sorting";
-        //those values are set so that it matches the index of each mode in string-array resource
-        static final int SORTING_DATE_ASC=0;
-        static final int SORTING_DATE_DESC=1;
-        static final int SORTING_TITLE_ASC=2;
-        static final int SORTING_TITLE_DESC=3;
+    static final String PREF_SORTING = "sorting";
+    //those values are set so that it matches the index of each mode in string-array resource
+    static final int SORTING_DATE_ASC = 0;
+    static final int SORTING_DATE_DESC = 1;
+    static final int SORTING_TITLE_ASC = 2;
+    static final int SORTING_TITLE_DESC = 3;
 
-    static final int REQUEST_CODE_EXPORT_MEMOS=0;
-    static final int REQUEST_CODE_IMPORT_MEMOS=1;
+    static final int REQUEST_CODE_EXPORT_MEMOS = 0;
+    static final int REQUEST_CODE_IMPORT_MEMOS = 1;
 
     static SharedPreferences appInfo;
 
     BottomNavigationView botNav;
     Fragment currentFragment;
 
+    public static java.util.Comparator<TaskDataProvider> getTaskComparator() {
+        int sortMode = appInfo.getInt(PREF_SORTING, SORTING_DATE_ASC); //get sort mode
+        switch (sortMode) {
+            case SORTING_DATE_ASC:
+                return new Task.DateComparator(true);
+            case SORTING_DATE_DESC:
+                return new Task.DateComparator(false);
+            case SORTING_TITLE_ASC:
+                return new Task.TitleComparator(true);
+            case SORTING_TITLE_DESC:
+                return new Task.TitleComparator(false);
+            default:
+                throw (new RuntimeException("Unidentified sorting mode"));
+        }
+    }
+
+    public void onAddButtonClick(View view) {
+        TaskAddActivity.launchActivity(this);
+    }
+
+    public void onSortByMenuClick(MenuItem item) {
+        new SortingPickerFragment().show(getSupportFragmentManager(), "tag");
+    }
+
+    public void onExportImportMenuClick(MenuItem item) {
+        new ExportImportSelectorFragment().show(getSupportFragmentManager(), "tag");
+    }
+
+    public void onDeleteCompletedTasksMenuClick(MenuItem item) {
+        DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().deleteCompletedTasks();
+        Toast.makeText(this, R.string.toast_tasks_deleted, Toast.LENGTH_SHORT).show();
+        if (botNav.getSelectedItemId() == R.id.bot_nav_completed) {
+            ((FragmentCompletedTasks) currentFragment).updateTaskList();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //get appInfo
-        appInfo=getPreferences(Context.MODE_PRIVATE);
+        appInfo = getPreferences(Context.MODE_PRIVATE);
         //set up appbar
-        Toolbar appbar=findViewById(R.id.appbar_main);
+        Toolbar appbar = findViewById(R.id.appbar);
         appbar.inflateMenu(R.menu.menu_main);
 
         //set up bottomNavigationView
@@ -93,42 +129,6 @@ public class MainActivity extends FragmentActivity {
 
         //shows pending task when entering main
         botNav.setSelectedItemId(R.id.bot_nav_pending);
-    }
-
-    public void onAddButtonClick(View view){
-        TaskAddActivity.launchActivity(this);
-    }
-
-    public void onSortByMenuClick(MenuItem item) {
-        new SortingPickerFragment().show(getSupportFragmentManager(),"tag");
-    }
-
-    public void onExportImportMenuClick(MenuItem item) {
-        new ExportImportSelectorFragment().show(getSupportFragmentManager(),"tag");
-    }
-
-    public void onDeleteCompletedTasksMenuClick(MenuItem item) {
-        DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().deleteCompletedTasks();
-        Toast.makeText(this, R.string.toast_tasks_deleted, Toast.LENGTH_SHORT).show();
-        if (botNav.getSelectedItemId()==R.id.bot_nav_completed) {
-            ((FragmentCompletedTasks)currentFragment).updateTaskList();
-        }
-    }
-
-    public static java.util.Comparator<Task> getTaskComparator(){
-        int sortMode=appInfo.getInt(PREF_SORTING,SORTING_DATE_ASC); //get sort mode
-        switch(sortMode){
-            case SORTING_DATE_ASC:
-                return new Task.DateComparator(true);
-            case SORTING_DATE_DESC:
-                return new Task.DateComparator(false);
-            case SORTING_TITLE_ASC:
-                return new Task.TitleComparator(true);
-            case SORTING_TITLE_DESC:
-                return new Task.TitleComparator(false);
-            default:
-                throw(new RuntimeException("Unidentified sorting mode"));
-        }
     }
 
     private void exportMemosTo(Uri uri) {
