@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -52,20 +51,20 @@ public class FragmentPendingTasks extends Fragment{
                 return task.completed;
             }
         };
-        Date today = Date.getToday();
+        final Date today = Date.getToday();
 
         List<Task> _overDueTasks = dao.selectTaskBeforeDate(today);
         _overDueTasks.removeIf(isTaskCompleted);
         _overDueTasks.sort(new Task.DateComparator(true));
-        List<TaskDataProvider> overDueTasks = new ArrayList<TaskDataProvider>(_overDueTasks);
+        final List<TaskDataProvider> overDueTasks = new ArrayList<TaskDataProvider>(_overDueTasks);
 
         List<Task> _todayTasks = dao.selectTaskAtDate(today);
         _todayTasks.removeIf(isTaskCompleted);
-        List<TaskDataProvider> todayTasks = new ArrayList<TaskDataProvider>(_todayTasks);
+        final List<TaskDataProvider> todayTasks = new ArrayList<TaskDataProvider>(_todayTasks);
 
         List<Task> _rest = dao.selectTaskAfterDate(today);
         _rest.removeIf(isTaskCompleted);
-        List<TaskDataProvider> rest = new ArrayList<TaskDataProvider>(_rest);
+        final List<TaskDataProvider> rest = new ArrayList<TaskDataProvider>(_rest);
 
         List<Task> _noDateTasks = dao.selectTaskWithoutDate();
         _noDateTasks.removeIf(isTaskCompleted);
@@ -74,20 +73,28 @@ public class FragmentPendingTasks extends Fragment{
 
         List<RecurringTask> recurringTaskList = recurringTaskDao.selectAll();
 
-        final List<RecurringTaskInstance> recurringTaskInstanceList = new LinkedList<>();
+        //get recurringTaskInstances for each recurringTask and put each of them in the right category
         recurringTaskList.forEach(new Consumer<RecurringTask>() {
             @Override
             public void accept(RecurringTask recurringTask) {
-                recurringTaskInstanceList.addAll(recurringTask.getActiveInstances());
+                recurringTask.getActiveInstances().forEach(new Consumer<RecurringTaskInstance>() {
+                    @Override
+                    public void accept(RecurringTaskInstance taskInstance) {
+                        if (taskInstance.getDate().compareTo(today) < 0) {
+                            overDueTasks.add(taskInstance);
+                        } else if (taskInstance.getDate().compareTo(today) == 0) {
+                            todayTasks.add(taskInstance);
+                        } else {
+                            rest.add(taskInstance);
+                        }
+                    }
+                });
             }
         });
 
-        noDateTasks.addAll(recurringTaskInstanceList);
 
-
-        //set up recyclerviews and their adapters
-
-
+        //determine which views should be shown
+        //also, set up recyclerViews and their adapters
         View noDateView = requireActivity().findViewById(R.id.include_no_date);
         if (noDateTasks.isEmpty()) {
             //hide overdue task view

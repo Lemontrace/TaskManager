@@ -36,8 +36,10 @@ class RecurringTask implements TaskDataProvider {
     public List<Boolean> onDay;
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public List<Date> completedDates;
+    /*
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public List<Date> skippedDates;
+     */
 
 
     RecurringTask() {
@@ -51,7 +53,7 @@ class RecurringTask implements TaskDataProvider {
             onDay.add(true);
         }
         completedDates = new ArrayList<>();
-        skippedDates = new ArrayList<>();
+        //skippedDates = new ArrayList<>();
     }
 
     @Override
@@ -148,6 +150,14 @@ class RecurringTask implements TaskDataProvider {
         }
 
         return day;
+    }
+
+    public List<? extends RecurringTaskInstance> getCompletedInstances() {
+        List<RecurringTaskInstance> completedInstances = new ArrayList<>();
+        for (Date date : completedDates) {
+            completedInstances.add(new RecurringTaskInstance(this, date));
+        }
+        return completedInstances;
     }
 
     public static class onDayConverter {

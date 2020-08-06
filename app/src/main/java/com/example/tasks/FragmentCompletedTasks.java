@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 public class FragmentCompletedTasks extends Fragment {
@@ -55,7 +56,22 @@ public class FragmentCompletedTasks extends Fragment {
 
     public void updateTaskList() {
         //get completed tasks and sort them
-        List<Task> completedTasks = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getTaskDao().selectByCompletedState(true);
+        List<Task> _completedTasks = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getTaskDao().selectByCompletedState(true);
+        List<TaskDataProvider> completedTasks = new ArrayList<TaskDataProvider>(_completedTasks);
+
+        List<RecurringTask> recurringTaskList = DatabaseHolder.getDatabase(requireContext()).getRecurringTaskDao().selectAll();
+
+        final List<RecurringTaskInstance> recurringTaskInstanceList = new ArrayList<>();
+        recurringTaskList.forEach(new Consumer<RecurringTask>() {
+            @Override
+            public void accept(RecurringTask recurringTask) {
+                recurringTaskInstanceList.addAll(recurringTask.getCompletedInstances());
+            }
+        });
+
+        completedTasks.addAll(recurringTaskInstanceList);
+
+
         completedTasks.sort(MainActivity.getTaskComparator());
         //update tasks
         adapter.submitList(new ArrayList<TaskDataProvider>(completedTasks));

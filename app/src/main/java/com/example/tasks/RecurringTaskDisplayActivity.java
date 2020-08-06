@@ -28,8 +28,6 @@ public class RecurringTaskDisplayActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
-    private boolean deleteClickedOnce = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +82,7 @@ public class RecurringTaskDisplayActivity extends AppCompatActivity {
         finish();
     }
 
+    private boolean deleteClickedOnce = false;
     public void onDeleteButtonClick(View view) {
         //delete Task when the button is clicked twice
         if (deleteClickedOnce) {

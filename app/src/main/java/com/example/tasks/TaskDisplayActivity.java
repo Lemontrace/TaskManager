@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -52,10 +51,20 @@ public class TaskDisplayActivity extends AppCompatActivity {
         }
     }
 
+    private boolean completedButtonClicked = false;
     public void onCompletedButtonClick(View view) {
-        //mark task as completed
+        //prevents this method from being invoked multiple times
+        if (!completedButtonClicked) {
+            completedButtonClicked = true;
+        } else {
+            return;
+        }
+
+        //invert completed state
         task.completed = !task.completed;
+        //update the task
         DatabaseHolder.getDatabase(getApplicationContext()).getTaskDao().updateTask(task);
+        //finish activity
         finish();
     }
 
@@ -88,7 +97,6 @@ public class TaskDisplayActivity extends AppCompatActivity {
             button.setText(R.string.task_mark_as_incomplete);
             button.setTextColor(getColor(R.color.colorCompletedTask));
             button.setCompoundDrawableTintList(getColorStateList(R.color.colorCompletedTask));
-            Toast.makeText(this, R.string.toast_task_deleted, Toast.LENGTH_SHORT).show();
         } else {
             button.setText(R.string.task_mark_as_complete);
         }

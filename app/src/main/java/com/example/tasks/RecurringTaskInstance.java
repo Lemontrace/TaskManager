@@ -1,8 +1,13 @@
 package com.example.tasks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RecurringTaskInstance implements TaskDataProvider {
 
-    static private int lastId = 0;
+    static List<RecurringTaskInstance> instanceList = new ArrayList<>();
+    static private int nextIndex = 0;
+
     private RecurringTask recurringTaskClass;
     private Date date;
     private int id;
@@ -10,7 +15,22 @@ public class RecurringTaskInstance implements TaskDataProvider {
     RecurringTaskInstance(RecurringTask recurringTaskClass, Date date) {
         this.recurringTaskClass = recurringTaskClass;
         this.date = date;
-        this.id = ++lastId;
+        this.id = nextIndex;
+        nextIndex += 1;
+        instanceList.add(this);
+    }
+
+    boolean isCompleted() {
+        return recurringTaskClass.completedDates.contains(this.date);
+    }
+
+    void setCompleted(AppDataBase dataBase, boolean state) {
+        if (state/*==true*/) {
+            recurringTaskClass.completedDates.add(this.date);
+        } else {
+            recurringTaskClass.completedDates.remove(this.date);
+        }
+        dataBase.getRecurringTaskDao().updateRecurringTask(recurringTaskClass);
     }
 
     @Override
@@ -21,6 +41,10 @@ public class RecurringTaskInstance implements TaskDataProvider {
     @Override
     public String getTitle() {
         return recurringTaskClass.title;
+    }
+
+    String getBody() {
+        return recurringTaskClass.body;
     }
 
     @Override
