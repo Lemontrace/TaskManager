@@ -133,28 +133,12 @@ interface TaskDao {
 
 class DateConverter {
     @TypeConverter
-    public static Date decode(Integer integer) {
-        if (integer==null) {
-            return null;
-        } else {
-            int day=integer%100;
-            integer-=day;
-            int month=(integer%10000)/100;
-            integer-=month*100;
-            int year=integer/10000;
-            return new Date(year,month,day);
-        }
+    public static Date decode(String string) {
+        return Date.decodeDateString(string);
     }
-
-    @SuppressWarnings("SpellCheckingInspection")
+    
     @TypeConverter
-    public static Integer encode(Date date) {
-        if (date==null) {
-            return null;
-        } else {
-            //yyyymmdd in base 10
-            return date.year*10000+date.month*100+date.day;
-        }
-
+    public static String encode(Date date) {
+        return Date.encodeToString(date);
     }
 }
