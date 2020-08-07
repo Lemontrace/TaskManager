@@ -20,8 +20,8 @@ class TaskCardViewHolderDateToday extends TaskCardViewHolderWithDateView {
 
     static class TaskCardViewHolderDateTodayFactory implements TaskCardViewHolderFactory {
 
-        Integer titleColor;
-        Integer dateColor;
+        final Integer titleColor;
+        final Integer dateColor;
 
         TaskCardViewHolderDateTodayFactory(Integer titleColor, Integer dateColor) {
             this.titleColor = titleColor;
@@ -30,11 +30,11 @@ class TaskCardViewHolderDateToday extends TaskCardViewHolderWithDateView {
 
         @Override
         public TaskCardViewHolder create(ViewGroup parent) {
-            //params for making cardview fill the space
-            RecyclerView.LayoutParams params=new RecyclerView.LayoutParams(
+            //params for making cardView fill the space
+            RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(
                     RecyclerView.LayoutParams.MATCH_PARENT,RecyclerView.LayoutParams.WRAP_CONTENT
             );
-            //create cardview and apply params
+            //create cardView and apply params
             CardView card=new CardView(parent.getContext());
             card.setLayoutParams(params);
 

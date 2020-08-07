@@ -39,7 +39,7 @@ public class FragmentCompletedTasks extends Fragment {
         appbar.setTitle(R.string.main_bot_nav_completed);
 
         //set up recyclerView
-        RecyclerView taskViewCompleted = requireActivity().findViewById(R.id.taskview);
+        RecyclerView taskViewCompleted = requireActivity().findViewById(R.id.task_view);
         taskViewCompleted.setLayoutManager(new LinearLayoutManager(getContext()));
         Integer textColor = getResources().getColor(R.color.colorCompletedTask, null);
         //get viewHolder factory
@@ -74,6 +74,6 @@ public class FragmentCompletedTasks extends Fragment {
 
         completedTasks.sort(MainActivity.getTaskComparator());
         //update tasks
-        adapter.submitList(new ArrayList<TaskDataProvider>(completedTasks));
+        adapter.submitList(new ArrayList<>(completedTasks));
     }
 }

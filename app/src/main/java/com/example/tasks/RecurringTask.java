@@ -162,7 +162,7 @@ class RecurringTask implements TaskDataProvider {
 
     public static class onDayConverter {
 
-        //converts boolean list of length 7 to bitstring of the same length
+        //converts boolean list of length 7 to bit string of the same length
         @TypeConverter
         public static String encode(List<Boolean> onDay) {
             StringBuilder result = new StringBuilder();
@@ -176,7 +176,7 @@ class RecurringTask implements TaskDataProvider {
             return result.toString();
         }
 
-        //converts bitstring of length 7 to boolean list of the same length
+        //converts bit string of length 7 to boolean list of the same length
         @TypeConverter
         public static List<Boolean> decode(String string) {
             List<Boolean> result=new ArrayList<>();

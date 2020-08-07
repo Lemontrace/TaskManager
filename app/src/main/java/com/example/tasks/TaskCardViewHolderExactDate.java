@@ -26,28 +26,28 @@ class TaskCardViewHolderExactDate extends TaskCardViewHolderWithDateView {
     static class TaskCardViewHolderExactDateFactory implements TaskCardViewHolderFactory {
 
 
-        Integer titleColor;
-        Integer dateColor;
+        final Integer titleColor;
+        final Integer dateColor;
 
-        TaskCardViewHolderExactDateFactory(Integer titleColor,Integer dateColor) {
-            this.titleColor=titleColor;
-            this.dateColor=dateColor;
+        TaskCardViewHolderExactDateFactory(Integer titleColor, Integer dateColor) {
+            this.titleColor = titleColor;
+            this.dateColor = dateColor;
         }
 
         @Override
         public TaskCardViewHolder create(ViewGroup parent) {
-            //params for making cardview fill the space
-            RecyclerView.LayoutParams params=new RecyclerView.LayoutParams(
+            //params for making cardView fill the space
+            RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(
                     RecyclerView.LayoutParams.MATCH_PARENT,RecyclerView.LayoutParams.WRAP_CONTENT
             );
-            //create cardview and apply params
+            //create cardView and apply params
             CardView card=new CardView(parent.getContext());
             card.setLayoutParams(params);
 
             //inflate card body
             LayoutInflater.from(parent.getContext()).inflate(R.layout.task_view_card,card);
 
-            //get viewholder instance and set colors
+            //get viewHolder instance and set colors
             TaskCardViewHolderExactDate taskCardViewHolderExactDate = new TaskCardViewHolderExactDate(card);
             taskCardViewHolderExactDate.titleColor=titleColor;
             taskCardViewHolderExactDate.dateColor=dateColor;

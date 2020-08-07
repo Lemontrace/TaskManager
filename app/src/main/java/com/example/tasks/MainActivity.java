@@ -185,7 +185,7 @@ public class MainActivity extends FragmentActivity {
                     break;
                 } else {
                     //add attribute to the hash
-                    attributes.put(pair[0], Task.unescaped(pair[1]));
+                    attributes.put(pair[0], CustomStringEscape.unescaped(pair[1]));
                 }
             }
 

@@ -2,6 +2,7 @@ package com.example.tasks;
 
 import android.content.res.Resources;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -12,15 +13,9 @@ import androidx.room.Query;
 import androidx.room.TypeConverter;
 import androidx.room.Update;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 
 @Entity
@@ -44,6 +39,7 @@ class Task implements TaskDataProvider {
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public String body;
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
+    @Nullable
     public Date date;
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
     public boolean completed;
@@ -60,74 +56,13 @@ class Task implements TaskDataProvider {
         return task;
     }
 
-    static Task loadFromFile(File file) throws FileNotFoundException {
-        //parse the file into attribute-> savestring pairs
-        Scanner scanner = new Scanner(file);
-        String line=scanner.nextLine();
-        HashMap<String,String> save=new HashMap<>();
-        while (true) {
-            String[] pair = line.split(":",2);
-            save.put(pair[0], unescaped(pair[1]));
-
-            if (!scanner.hasNextLine()){break;}
-            line = scanner.nextLine();
-        }
-        scanner.close();
-
-        return Task.loadFromAttributes(save);
-    }
-
     String getSaveString() {
-        return String.format("title:%s\n", escaped(title)) +
-                String.format("body:%s\n", escaped(body)) +
-                String.format("date:%s\n", escaped(date.toString())) +
-                String.format("completed:%s\n", escaped(String.valueOf(completed)));
+        return String.format("title:%s\n", CustomStringEscape.escaped(title)) +
+                String.format("body:%s\n", CustomStringEscape.escaped(body)) +
+                String.format("date:%s\n", CustomStringEscape.escaped(Date.encodeToString(date))) +
+                String.format("completed:%s\n", CustomStringEscape.escaped(String.valueOf(completed)));
     }
 
-    void saveToFile(File file) throws IOException {
-        FileWriter fileWriter=new FileWriter(file);
-        //write to file
-        fileWriter.write(getSaveString());
-        //close file
-        fileWriter.close();
-    }
-
-    //escapes \n and %(custom escaping)
-    private static String escaped(String str) {
-        return str.replace("%", "%%").replace("\n", "%n");
-    }
-
-    //unescape
-    static String unescaped(String str) {
-        char current;
-        char next;
-        java.util.ArrayList<String> unescaped = new ArrayList<>();
-        for (int i = 0; i < str.length(); i++) {
-            current = str.charAt(i);
-            if (i == str.length() - 1) {
-                next = ' ';
-            } else {
-                next = str.charAt(i + 1);
-            }
-
-            if (current == '%') {
-                if (next == '%') {
-                    unescaped.add("%");
-                    i++;
-                } else if (next == 'n') {
-                    unescaped.add("\n");
-                    i++;
-                }
-            } else {
-                unescaped.add(String.valueOf(current));
-            }
-        }
-        StringBuilder sb = new StringBuilder();
-        for (String ch : unescaped) {
-            sb.append(ch);
-        }
-        return sb.toString();
-    }
 
     @Override
     public Integer getId() {
@@ -140,6 +75,7 @@ class Task implements TaskDataProvider {
     }
 
     @Override
+    @Nullable
     public Date getDate() {
         return date;
     }
@@ -148,7 +84,6 @@ class Task implements TaskDataProvider {
     public Integer getTaskType() {
         return TASK_TYPE_TASK;
     }
-
 
 }
 
@@ -211,6 +146,7 @@ class DateConverter {
         }
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @TypeConverter
     public static Integer encode(Date date) {
         if (date==null) {

@@ -18,7 +18,7 @@ public interface TaskDataProvider {
 
     class DateComparator implements java.util.Comparator<TaskDataProvider> {
 
-        int factor;
+        final int factor;
 
         DateComparator(boolean ascending) {
             if (ascending) {
@@ -46,7 +46,7 @@ public interface TaskDataProvider {
 
     class TitleComparator implements java.util.Comparator<TaskDataProvider> {
 
-        int factor;
+        final int factor;
 
         TitleComparator(boolean ascending) {
             if (ascending) {

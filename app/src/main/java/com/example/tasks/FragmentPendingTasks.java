@@ -103,7 +103,7 @@ public class FragmentPendingTasks extends Fragment{
             //show overdue task view
             noDateView.setVisibility(View.VISIBLE);
             //set up recyclerView
-            RecyclerView taskViewNoDate = requireActivity().findViewById(R.id.taskview_no_date);
+            RecyclerView taskViewNoDate = requireActivity().findViewById(R.id.task_view_no_date);
             taskViewNoDate.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //default colors
@@ -126,7 +126,7 @@ public class FragmentPendingTasks extends Fragment{
             //show overdue task view
             overDueView.setVisibility(View.VISIBLE);
             //set up recyclerView
-            RecyclerView taskViewOverDue = requireActivity().findViewById(R.id.taskview_overdue);
+            RecyclerView taskViewOverDue = requireActivity().findViewById(R.id.task_view_overdue);
             taskViewOverDue.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //dark color for date
@@ -150,7 +150,7 @@ public class FragmentPendingTasks extends Fragment{
             //show today task view
             todayView.setVisibility(View.VISIBLE);
             //set up recyclerView
-            RecyclerView taskViewToday = requireActivity().findViewById(R.id.taskview_today);
+            RecyclerView taskViewToday = requireActivity().findViewById(R.id.task_view_today);
             taskViewToday.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //accent color for date
@@ -174,8 +174,8 @@ public class FragmentPendingTasks extends Fragment{
             //show overdue task view
             restView.setVisibility(View.VISIBLE);
             //set up recyclerView
-            RecyclerView taskViewrest = requireActivity().findViewById(R.id.taskview_rest);
-            taskViewrest.setLayoutManager(new LinearLayoutManager(getContext()));
+            RecyclerView taskViewRest = requireActivity().findViewById(R.id.task_view_rest);
+            taskViewRest.setLayoutManager(new LinearLayoutManager(getContext()));
             //get viewHolder factory
             //dark color for date
             TaskCardViewHolderFactory factory =
@@ -184,7 +184,7 @@ public class FragmentPendingTasks extends Fragment{
             //get adapter that uses the factory
             TaskListAdapter adapterRest = TaskListAdapter.getInstance(factory);
             //set adapter
-            taskViewrest.setAdapter(adapterRest);
+            taskViewRest.setAdapter(adapterRest);
             //update tasks
             rest.sort(new TaskDataProvider.DateComparator(true));
             adapterRest.submitList(rest);

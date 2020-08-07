@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorButtonNormal">@color/colorMenu</item>
         <item name="titleTextColor">@color/colorMenu</item>
+
+        <item name="backgroundColor">@color/colorMenu</item>
     </style>
 
     <style name="Widget.AppCompat.Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">

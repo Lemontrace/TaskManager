@@ -10,11 +10,9 @@
     <string name="title_edit_task">Edit</string>
 
     <string name="menu_display_edit">Edit</string>
-    <string name="menu_display_delete">Delete</string>
 
     <string name="menu_main_sort_by">Sort by…</string>
 
-    <string name="menu_main_show_past_memos">Show past memos</string>
     <string name="menu_main_export_or_import">Export/Import</string>
 
     <string name="toast_export_success">Export complete!</string>
@@ -34,24 +32,20 @@
         <item>export memos to…</item>
         <item>import memos from…</item>
     </string-array>
-    <string name="menu_main_notification">Notifications</string>
     <string name="main_bot_nav_completed">Completed Tasks</string>
     <string name="main_bot_nav_pending">Pending Tasks</string>
     <string name="app_name">Tasks</string>
     <string name="today">Today</string>
     <string name="overdue">Overdue</string>
-    <string name="title_main">Task</string>
     <string name="no_title">&lt;No Title&gt;</string>
     <string name="main_bot_nav_all">All Tasks</string>
     <string name="edit_unset_date">unset</string>
-    <string name="no_pending_task">No Pending Task</string>
     <string name="date_not_set">Date Not Set</string>
 
     <string name="task_delete">Delete</string>
     <string name="task_mark_as_complete">mark as complete</string>
     <string name="task_mark_as_incomplete">mark as incomplete</string>
     <string name="delete_all_completed_tasks">Delete completed tasks</string>
-    <string name="toast_task_deleted">Task deleted</string>
     <string name="toast_tasks_deleted">Tasks deleted</string>
     <string name="recurring_task">recurring task</string>
     <string name="monday_short">Mon</string>
@@ -64,7 +58,6 @@
     <string name="edit_starting_date">Starting date :</string>
     <string name="edit_starting_date_required">Starting date is required!</string>
     <string name="rest">rest</string>
-    <string name="task_skip">Skip</string>
 
 
 </resources>

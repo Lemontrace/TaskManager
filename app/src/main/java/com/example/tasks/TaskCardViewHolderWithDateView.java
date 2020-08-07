@@ -7,9 +7,9 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 
 abstract class TaskCardViewHolderWithDateView extends TaskCardViewHolder {
-    TextView dateView;
+    final TextView dateView;
     @ColorInt
-    Integer dateColor=null;
+    Integer dateColor = null;
 
     TaskCardViewHolderWithDateView(View view){
         super(view);

@@ -63,7 +63,7 @@ class Date {
     static final String STRING_NULL_DATE = "Null Date";
 
     @SuppressLint("DefaultLocale")
-    static String getDateString(Date date) {
+    static String encodeToString(Date date) {
         if (date == null) {
             return STRING_NULL_DATE;
         } else {
@@ -100,7 +100,7 @@ class Date {
     @Override
     @NonNull
     public String toString() {
-        return Date.getDateString(this);
+        return Date.encodeToString(this);
     }
 
     @Override

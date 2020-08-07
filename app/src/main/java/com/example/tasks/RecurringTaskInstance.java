@@ -5,12 +5,12 @@ import java.util.List;
 
 public class RecurringTaskInstance implements TaskDataProvider {
 
-    static List<RecurringTaskInstance> instanceList = new ArrayList<>();
+    static final List<RecurringTaskInstance> instanceList = new ArrayList<>();
     static private int nextIndex = 0;
 
-    private RecurringTask recurringTaskClass;
-    private Date date;
-    private int id;
+    private final RecurringTask recurringTaskClass;
+    private final Date date;
+    private final int id;
 
     RecurringTaskInstance(RecurringTask recurringTaskClass, Date date) {
         this.recurringTaskClass = recurringTaskClass;

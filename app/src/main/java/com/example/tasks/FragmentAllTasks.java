@@ -50,13 +50,13 @@ public class FragmentAllTasks extends Fragment{
         //get recurring tasks
         List<RecurringTask> recurringTasks = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getRecurringTaskDao().selectAll();
 
-        List<TaskDataProvider> TaskDatas = new ArrayList<>();
-        TaskDatas.addAll(tasks);
-        TaskDatas.addAll(recurringTasks);
+        List<TaskDataProvider> taskDataList = new ArrayList<>();
+        taskDataList.addAll(tasks);
+        taskDataList.addAll(recurringTasks);
 
 
         //set up recyclerView
-        RecyclerView taskViewAll = requireActivity().findViewById(R.id.taskview);
+        RecyclerView taskViewAll = requireActivity().findViewById(R.id.task_view);
         taskViewAll.setLayoutManager(new LinearLayoutManager(getContext()));
         //get viewHolder factory
         TaskCardViewHolderFactory factory =
@@ -69,6 +69,6 @@ public class FragmentAllTasks extends Fragment{
         //set adapter
         taskViewAll.setAdapter(adapter);
         //update tasks
-        adapter.submitList(TaskDatas);
+        adapter.submitList(taskDataList);
     }
 }

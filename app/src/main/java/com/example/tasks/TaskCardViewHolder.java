@@ -10,17 +10,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 abstract class TaskCardViewHolder extends RecyclerView.ViewHolder {
 
-    CardView card;
-    TextView titleView;
+    final CardView card;
+    final TextView titleView;
     @ColorInt
-    Integer titleColor=null;
+    Integer titleColor = null;
 
 
     TaskCardViewHolder(View view) {
         super(view);
-        card=(CardView) view;
-        ViewGroup linearLayout=(ViewGroup) card.getChildAt(0);
-        titleView=(TextView) linearLayout.getChildAt(0);
+        card = (CardView) view;
+        ViewGroup linearLayout = (ViewGroup) card.getChildAt(0);
+        titleView = (TextView) linearLayout.getChildAt(0);
     }
 
     void bindTo(final TaskDataProvider taskData) {

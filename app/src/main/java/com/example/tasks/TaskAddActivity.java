@@ -31,7 +31,7 @@ public class TaskAddActivity extends FragmentActivity {
             DatePickerFragment fragment = new DatePickerFragment();
             fragment.show(getSupportFragmentManager(), "Pick a date");
         } else {
-            //date is set : unsetting
+            //date is set : un-setting
             date = null;
             TextView dateView = findViewById(R.id.date);
             dateView.setText(Date.getDateStringInContext(this, date));
