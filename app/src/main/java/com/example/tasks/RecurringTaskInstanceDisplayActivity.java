@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -68,6 +69,11 @@ public class RecurringTaskInstanceDisplayActivity extends AppCompatActivity {
         taskInstance.setCompleted(DatabaseHolder.getDatabase(getApplicationContext()), !taskInstance.isCompleted());
         //finish activity
         finish();
+    }
+
+    public void onDeleteButtonClick(View view) {
+        //todo
+        Toast.makeText(this, "this button will be changed", Toast.LENGTH_SHORT).show();
     }
 
     private void displayTask(RecurringTaskInstance taskInstance) {

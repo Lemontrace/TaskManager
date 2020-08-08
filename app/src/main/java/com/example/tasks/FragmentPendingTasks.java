@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +15,12 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 
-public class FragmentPendingTasks extends Fragment{
+public class FragmentPendingTasks extends TaskListFragment {
+
+    private View noDateView;
+    private View overDueView;
+    private View todayView;
+    private View restView;
 
     public FragmentPendingTasks() {
         // Required empty public constructor
@@ -39,7 +43,17 @@ public class FragmentPendingTasks extends Fragment{
         Toolbar appbar = requireActivity().findViewById(R.id.appbar);
         appbar.setTitle(R.string.main_bot_nav_pending);
 
+        noDateView = requireActivity().findViewById(R.id.include_no_date);
+        overDueView = requireActivity().findViewById(R.id.include_overdue);
+        todayView = requireActivity().findViewById(R.id.include_today);
+        restView = requireActivity().findViewById(R.id.include_rest);
 
+        updateTaskList();
+
+    }
+
+    @Override
+    void updateTaskList() {
         //get dao
         TaskDao dao = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getTaskDao();
         RecurringTaskDao recurringTaskDao = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getRecurringTaskDao();
@@ -95,7 +109,6 @@ public class FragmentPendingTasks extends Fragment{
 
         //determine which views should be shown
         //also, set up recyclerViews and their adapters
-        View noDateView = requireActivity().findViewById(R.id.include_no_date);
         if (noDateTasks.isEmpty()) {
             //hide overdue task view
             noDateView.setVisibility(View.GONE);
@@ -118,7 +131,6 @@ public class FragmentPendingTasks extends Fragment{
             adapterNoDate.submitList(noDateTasks);
         }
 
-        View overDueView = requireActivity().findViewById(R.id.include_overdue);
         if (overDueTasks.isEmpty()) {
             //hide overdue task view
             overDueView.setVisibility(View.GONE);
@@ -142,7 +154,6 @@ public class FragmentPendingTasks extends Fragment{
             adapterOverDue.submitList(overDueTasks);
         }
 
-        View todayView = requireActivity().findViewById(R.id.include_today);
         if (todayTasks.isEmpty()) {
             //hide today task view
             todayView.setVisibility(View.GONE);
@@ -166,7 +177,6 @@ public class FragmentPendingTasks extends Fragment{
             adapterToday.submitList(todayTasks);
         }
 
-        View restView = requireActivity().findViewById(R.id.include_rest);
         if (rest.isEmpty()) {
             //hide overdue task view
             restView.setVisibility(View.GONE);
@@ -189,8 +199,6 @@ public class FragmentPendingTasks extends Fragment{
             rest.sort(new TaskDataProvider.DateComparator(true));
             adapterRest.submitList(rest);
         }
-
     }
-
 }
 

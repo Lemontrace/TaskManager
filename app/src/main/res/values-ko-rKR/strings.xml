@@ -49,5 +49,5 @@
     <string name="sunday_short">일</string>
     <string name="edit_starting_date">시작 날짜</string>
     <string name="edit_starting_date_required">시작 날짜는 필수 항목입니다.</string>
-    <string name="rest">나머지</string>
+    <string name="rest">다가오는</string>
 </resources>

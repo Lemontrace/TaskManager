@@ -1,7 +1,5 @@
 package com.example.tasks;
 
-import android.content.res.Resources;
-
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
@@ -13,9 +11,10 @@ import androidx.room.Query;
 import androidx.room.TypeConverter;
 import androidx.room.Update;
 
-import java.util.HashMap;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
-import java.util.Objects;
 
 
 @Entity
@@ -24,7 +23,6 @@ class Task implements TaskDataProvider {
     //attributes : id,title,body,date,completed,type
     Task() {
         //default values
-        id = 0;
         title = "";
         body = "";
         date = null;
@@ -38,22 +36,23 @@ class Task implements TaskDataProvider {
     public String title;
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public String body;
-    @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     @Nullable
     public Date date;
     @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
     public boolean completed;
 
-    static Task loadFromAttributes(HashMap<String,String> save) {
-        Task task=new Task();
-        //decoding attributes
-        task.title=save.getOrDefault("title",""); //title
-        task.body=save.getOrDefault("body",""); //body
-        String dateString = save.getOrDefault("date", Resources.getSystem().getString(R.string.date_not_set));
-        task.date = Date.decodeDateString(Objects.requireNonNull(dateString)); //date
-        String completedString=save.getOrDefault("completed:%s","false");
-        task.completed=Boolean.parseBoolean(completedString);
-        return task;
+    public static Task loadFromJSON(JSONObject jsonObject) {
+        Task task = new Task();
+        try {
+            task.title = jsonObject.getString("title");
+            task.body = jsonObject.getString("body");
+            task.date = Date.decodeDateString(jsonObject.getString("date"));
+            task.completed = jsonObject.getBoolean("completed");
+            return task;
+        } catch (JSONException e) {
+            throw new RuntimeException("JSON parsing error", e);
+        }
     }
 
     String getSaveString() {
@@ -61,6 +60,26 @@ class Task implements TaskDataProvider {
                 String.format("body:%s\n", CustomStringEscape.escaped(body)) +
                 String.format("date:%s\n", CustomStringEscape.escaped(Date.encodeToString(date))) +
                 String.format("completed:%s\n", CustomStringEscape.escaped(String.valueOf(completed)));
+    }
+
+
+    //returned JSON Object structure
+    /*
+    {
+        string title,
+        string body,
+        string date,
+        boolean completed
+    }
+    */
+    JSONObject toJSON() throws JSONException {
+        JSONObject json = new JSONObject();
+        json
+                .put("title", title)
+                .put("body", body)
+                .put("date", Date.encodeToString(date))
+                .put("completed", completed);
+        return json;
     }
 
 
@@ -136,7 +155,7 @@ class DateConverter {
     public static Date decode(String string) {
         return Date.decodeDateString(string);
     }
-    
+
     @TypeConverter
     public static String encode(Date date) {
         return Date.encodeToString(date);

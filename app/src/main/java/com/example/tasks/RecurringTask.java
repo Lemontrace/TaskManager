@@ -15,8 +15,13 @@ import androidx.room.Query;
 import androidx.room.TypeConverter;
 import androidx.room.Update;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 @Entity
@@ -30,7 +35,7 @@ class RecurringTask implements TaskDataProvider {
     public String title;
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public String body;
-    @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public Date date;
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
     public List<Boolean> onDay;
@@ -44,7 +49,6 @@ class RecurringTask implements TaskDataProvider {
 
     RecurringTask() {
         //default values
-        id = 0;
         title = "";
         body = "";
         date = null;
@@ -54,6 +58,24 @@ class RecurringTask implements TaskDataProvider {
         }
         completedDates = new ArrayList<>();
         //skippedDates = new ArrayList<>();
+    }
+
+    public static RecurringTask loadFromJSON(JSONObject jsonObject) {
+        RecurringTask task = new RecurringTask();
+        try {
+            task.title = jsonObject.getString("title");
+            task.body = jsonObject.getString("body");
+            task.date = Date.decodeDateString(jsonObject.getString("date"));
+            task.onDay = onDayConverter.decode(jsonObject.getString("onDay"));
+            JSONArray completedDatesArray = jsonObject.getJSONArray("completedDates");
+            for (int i = 0; i < completedDatesArray.length(); i++) {
+                task.completedDates.add(Date.decodeDateString(completedDatesArray.getString(i)));
+            }
+            return task;
+        } catch (JSONException e) {
+            throw new RuntimeException("JSON parsing error", e);
+        }
+
     }
 
     @Override
@@ -158,6 +180,36 @@ class RecurringTask implements TaskDataProvider {
             completedInstances.add(new RecurringTaskInstance(this, date));
         }
         return completedInstances;
+    }
+
+
+    //returned JSON Object structure
+    /*
+    {
+            string title
+            string body
+            string date
+            string onDay
+            completedDates : array of string
+     }
+     */
+    JSONObject toJSON() throws JSONException {
+        JSONObject json = new JSONObject();
+        json
+                .put("title", title)
+                .put("body", body)
+                .put("date", Date.encodeToString(date))
+                .put("onDay", onDayConverter.encode(onDay));
+
+        final JSONArray completedDatesArray = new JSONArray();
+        completedDates.forEach(new Consumer<Date>() {
+            @Override
+            public void accept(Date date) {
+                completedDatesArray.put(Date.encodeToString(date));
+            }
+        });
+        json.put("completedDates", completedDatesArray);
+        return json;
     }
 
     public static class onDayConverter {

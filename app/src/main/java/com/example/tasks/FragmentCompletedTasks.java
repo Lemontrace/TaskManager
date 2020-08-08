@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
-public class FragmentCompletedTasks extends Fragment {
+public class FragmentCompletedTasks extends TaskListFragment {
 
     public FragmentCompletedTasks() {
         // Required empty public constructor
@@ -26,7 +25,7 @@ public class FragmentCompletedTasks extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_single_tasks_list, container, false);
+        return inflater.inflate(R.layout.fragment_single_task_list, container, false);
     }
 
     TaskListAdapter adapter;
@@ -54,7 +53,7 @@ public class FragmentCompletedTasks extends Fragment {
         updateTaskList();
     }
 
-    public void updateTaskList() {
+    void updateTaskList() {
         //get completed tasks and sort them
         List<Task> _completedTasks = DatabaseHolder.getDatabase(requireActivity().getApplicationContext()).getTaskDao().selectByCompletedState(true);
         List<TaskDataProvider> completedTasks = new ArrayList<TaskDataProvider>(_completedTasks);

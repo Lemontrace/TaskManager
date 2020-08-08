@@ -3,15 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorBackground"
     tools:context=".RecurringTaskDisplayActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/BaseAppBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,11 +46,11 @@
             android:layout_weight="1"
             android:background="@color/colorMenu"
             android:drawableTop="@drawable/ic_close_black_48dp"
-            android:drawableTint="@color/colorPrimaryDark"
+            android:drawableTint="?attr/colorPrimaryDark"
             android:onClick="onDeleteButtonClick"
             android:text="@string/task_delete"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="?attr/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/confirm"

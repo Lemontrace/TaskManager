@@ -22,6 +22,7 @@ class TaskCardViewHolderAutoDate extends TaskCardViewHolderWithDateView {
     void bindTo(final TaskDataProvider taskData) {
         super.bindTo(taskData);
         if (taskData.getTaskType().equals(TaskDataProvider.TASK_TYPE_RECURRING_TASK)) {
+            //taskData represents recurring task
             dateView.setText(R.string.recurring_task);
             if (dateColorRecurring != null) dateView.setTextColor(dateColorRecurring);
         } else if (taskData.getDate() == null) {
@@ -32,9 +33,10 @@ class TaskCardViewHolderAutoDate extends TaskCardViewHolderWithDateView {
             dateView.setText(R.string.today);
             if (dateColorToday != null) dateView.setTextColor(dateColorToday);
         } else {
+            //date is set and is not today
             dateView.setText(Date.getDateStringInContext(card.getContext(), taskData.getDate()));
             if (taskData.getDate().compareTo(Date.getToday()) < 0) {
-                //overdue
+                //the task is overdue
                 if (dateColorOverdue != null) dateView.setTextColor(dateColorOverdue);
             }
         }

@@ -57,7 +57,7 @@
     <string name="sunday_short">Sun</string>
     <string name="edit_starting_date">Starting date :</string>
     <string name="edit_starting_date_required">Starting date is required!</string>
-    <string name="rest">rest</string>
+    <string name="rest">pending</string>
 
 
 </resources>
