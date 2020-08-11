@@ -101,6 +101,7 @@ class RecurringTask implements TaskDataProvider {
     @NonNull
     List<RecurringTaskInstance> getActiveInstances() {
         // TODO: 05/08/20 Maybe use database to store instances
+        //currently, instances are dynamically generated
 
         //this recurring task has no day selected; return empty list
         if (!onDay.contains(true)) return new ArrayList<>();
@@ -243,7 +244,7 @@ class RecurringTask implements TaskDataProvider {
         }
     }
 
-    public static class completedDatesConverter {
+    public static class dateListConverter {
 
         //converts list of dates to string of dates separated by \n(newline)
         //returns null when the list is empty

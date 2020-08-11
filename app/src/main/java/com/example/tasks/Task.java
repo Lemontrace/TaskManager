@@ -55,13 +55,6 @@ class Task implements TaskDataProvider {
         }
     }
 
-    String getSaveString() {
-        return String.format("title:%s\n", CustomStringEscape.escaped(title)) +
-                String.format("body:%s\n", CustomStringEscape.escaped(body)) +
-                String.format("date:%s\n", CustomStringEscape.escaped(Date.encodeToString(date))) +
-                String.format("completed:%s\n", CustomStringEscape.escaped(String.valueOf(completed)));
-    }
-
 
     //returned JSON Object structure
     /*

@@ -10,7 +10,7 @@ import androidx.room.TypeConverters;
 
 
 @Database(entities = {Task.class, RecurringTask.class}, version = 1, exportSchema = false)
-@TypeConverters({DateConverter.class, RecurringTask.onDayConverter.class, RecurringTask.completedDatesConverter.class})
+@TypeConverters({DateConverter.class, RecurringTask.onDayConverter.class, RecurringTask.dateListConverter.class})
 abstract class AppDataBase extends RoomDatabase {
     public abstract TaskDao getTaskDao();
     public abstract RecurringTaskDao getRecurringTaskDao();
